@@ -1,10 +1,11 @@
-'From Cuis 5.0 [latest update: #4507] on 6 January 2021 at 12:27:15 pm'!
+'From Cuis 5.0 [latest update: #4507] on 7 January 2021 at 8:03:38 pm'!
 'Description Cuis PostgreSQL adapter used for connecting to a PostgreSQL database using protocol V3
 
 License: MIT License
 Author: Josef Philip Bernhart
 P3 Author: Sven Van Caekenberghe'!
-!provides: 'PostgresAdapter' 1 11!
+!provides: 'PostgresAdapter' 1 26!
+!requires: 'Network-Kernel' 1 5 nil!
 SystemOrganization addCategory: 'PostgresAdapter-Tests'!
 SystemOrganization addCategory: 'PostgresAdapter'!
 
@@ -69,44 +70,44 @@ TestCase subclass: #PgArrayValueParserTest
 PgArrayValueParserTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgClientTest category: 'PostgresAdapter-Tests'!
-TestCase subclass: #PgClientTest
+!classDefinition: #PgClientIntegrationTest category: 'PostgresAdapter-Tests'!
+TestCase subclass: #PgClientIntegrationTest
 	instanceVariableNames: 'client'
 	classVariableNames: 'Url'
 	poolDictionaries: ''
 	category: 'PostgresAdapter-Tests'!
-!classDefinition: 'PgClientTest class' category: 'PostgresAdapter-Tests'!
-PgClientTest class
+!classDefinition: 'PgClientIntegrationTest class' category: 'PostgresAdapter-Tests'!
+PgClientIntegrationTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgConnectionPoolTest category: 'PostgresAdapter-Tests'!
-TestCase subclass: #PgConnectionPoolTest
+!classDefinition: #PgConnectionPoolIntegrationTest category: 'PostgresAdapter-Tests'!
+TestCase subclass: #PgConnectionPoolIntegrationTest
 	instanceVariableNames: 'pool'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter-Tests'!
-!classDefinition: 'PgConnectionPoolTest class' category: 'PostgresAdapter-Tests'!
-PgConnectionPoolTest class
+!classDefinition: 'PgConnectionPoolIntegrationTest class' category: 'PostgresAdapter-Tests'!
+PgConnectionPoolIntegrationTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgFormattedStatementTest category: 'PostgresAdapter-Tests'!
-TestCase subclass: #PgFormattedStatementTest
+!classDefinition: #PgFormattedStatementIntegrationTest category: 'PostgresAdapter-Tests'!
+TestCase subclass: #PgFormattedStatementIntegrationTest
 	instanceVariableNames: 'client'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter-Tests'!
-!classDefinition: 'PgFormattedStatementTest class' category: 'PostgresAdapter-Tests'!
-PgFormattedStatementTest class
+!classDefinition: 'PgFormattedStatementIntegrationTest class' category: 'PostgresAdapter-Tests'!
+PgFormattedStatementIntegrationTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgPreparedStatementTest category: 'PostgresAdapter-Tests'!
-TestCase subclass: #PgPreparedStatementTest
+!classDefinition: #PgPreparedStatementIntegrationTest category: 'PostgresAdapter-Tests'!
+TestCase subclass: #PgPreparedStatementIntegrationTest
 	instanceVariableNames: 'client'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter-Tests'!
-!classDefinition: 'PgPreparedStatementTest class' category: 'PostgresAdapter-Tests'!
-PgPreparedStatementTest class
+!classDefinition: 'PgPreparedStatementIntegrationTest class' category: 'PostgresAdapter-Tests'!
+PgPreparedStatementIntegrationTest class
 	instanceVariableNames: ''!
 
 !classDefinition: #PgArrayValueParser category: 'PostgresAdapter'!
@@ -137,6 +138,16 @@ PgBitString subclass: #PgFixedBitString
 	category: 'PostgresAdapter'!
 !classDefinition: 'PgFixedBitString class' category: 'PostgresAdapter'!
 PgFixedBitString class
+	instanceVariableNames: ''!
+
+!classDefinition: #PgCharacterEncoder category: 'PostgresAdapter'!
+Object subclass: #PgCharacterEncoder
+	instanceVariableNames: 'stringEncoder streamReader'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PostgresAdapter'!
+!classDefinition: 'PgCharacterEncoder class' category: 'PostgresAdapter'!
+PgCharacterEncoder class
 	instanceVariableNames: ''!
 
 !classDefinition: #PgClient category: 'PostgresAdapter'!
@@ -349,6 +360,16 @@ Object subclass: #PgSystemAdapter
 PgSystemAdapter class
 	instanceVariableNames: 'instance'!
 
+!classDefinition: #PgCuisAdapter category: 'PostgresAdapter'!
+PgSystemAdapter subclass: #PgCuisAdapter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PostgresAdapter'!
+!classDefinition: 'PgCuisAdapter class' category: 'PostgresAdapter'!
+PgCuisAdapter class
+	instanceVariableNames: ''!
+
 !classDefinition: #PgValuesArray category: 'PostgresAdapter'!
 Object subclass: #PgValuesArray
 	instanceVariableNames: 'array'
@@ -378,7 +399,7 @@ I get signalled when the PostgreSQL database backend server signals a notificati
 !PgArrayValueParserTest commentStamp: '' prior: 0!
 P3ArrayValueParserTest holds unit tests for P3ArrayValueParser.!
 
-!PgClientTest commentStamp: '' prior: 0!
+!PgClientIntegrationTest commentStamp: '' prior: 0!
 P3ClientTest holds unit tests for the P3 PSQL client.
 
 Configure by setting my class side's connection URL.
@@ -396,17 +417,17 @@ Benchmarks
   P3ClientTest new runBenchmark1Bench.
   P3ClientTest new runAllTests.!
 
-!PgConnectionPoolTest commentStamp: '' prior: 0!
+!PgConnectionPoolIntegrationTest commentStamp: '' prior: 0!
 P3ConnectionPoolTest holds unit tests for the P3ConnectionPool class.
 
 I reuse the configuration of P3ClientTest.!
 
-!PgFormattedStatementTest commentStamp: '' prior: 0!
+!PgFormattedStatementIntegrationTest commentStamp: '' prior: 0!
 P3FormattedStatementTest holds unit tests for the P3FormattedStatement class.
 
 I reuse the configuration of P3ClientTest.!
 
-!PgPreparedStatementTest commentStamp: '' prior: 0!
+!PgPreparedStatementIntegrationTest commentStamp: '' prior: 0!
 P3PreparedStatementTest holds unit tests for the P3PreparedStatement class.
 
 I reuse the configuration of P3ClientTests. Example:
@@ -746,11 +767,10 @@ printOn: stream
 	1 to: self size do: [ :index |
 		stream nextPut: (48 + (bits bitAt: index)) asCharacter ]! !
 
-!PgClient methodsFor: 'printing'!
+!PgClient methodsFor: 'printing' stamp: 'jpb 1/7/2021 18:56:12'!
 printOn: stream
 	super printOn: stream.
 	stream nextPut: $(.
-	stream print: self url.
 	self session ifNotNil: [ stream space; print: session ].
 	stream nextPut: $)! !
 
@@ -877,21 +897,12 @@ printOn: stream
 name
 	^ name! !
 
-!PgResult methodsFor: 'printing'!
+!PgResult methodsFor: 'printing' stamp: 'jpb 1/7/2021 20:01:42'!
 printOn: stream
 	super printOn: stream.
 	stream nextPut: $(.
 	self hasResults
-		ifTrue: [ stream print: results ].
-	self hasData
-		ifTrue: [ stream
-				space;
-				print: self numberOfRecords;
-				<< (' record' asPluralBasedOn: self numberOfRecords);
-				space;
-				print: self numberOfColumns;
-				<< (' colum' asPluralBasedOn: self numberOfColumns) ].
-	stream nextPut: $)! !
+		ifTrue: [ stream print: results ].! !
 
 !PgRowFieldDescription methodsFor: 'printing'!
 printOn: stream
@@ -1099,11 +1110,11 @@ testSpecial
 			on: '{{one,two},{"\"","\\"},{NULL,""},{"NULL",1}' readStream;
 			next) ! !
 
-!PgClientTest methodsFor: 'benchmarking'!
+!PgClientIntegrationTest methodsFor: 'benchmarking'!
 benchmark1Size
 	^ 10000! !
 
-!PgClientTest methodsFor: 'benchmarking'!
+!PgClientIntegrationTest methodsFor: 'benchmarking'!
 runAllTests
 	"Runs all tests on the same connection/session"
 	
@@ -1114,7 +1125,7 @@ runAllTests
 	self tearDown.
 	^ timeToRun ! !
 
-!PgClientTest methodsFor: 'benchmarking'!
+!PgClientIntegrationTest methodsFor: 'benchmarking'!
 runBenchmark1
 	| result timeToRun |
 	result _ nil.
@@ -1124,7 +1135,7 @@ runBenchmark1
 	self tearDown.
 	^ timeToRun ! !
 
-!PgClientTest methodsFor: 'benchmarking'!
+!PgClientIntegrationTest methodsFor: 'benchmarking'!
 runBenchmark1Bench
 	| result timeToRun |
 	result _ nil.
@@ -1134,7 +1145,7 @@ runBenchmark1Bench
 	self tearDown.
 	^ timeToRun ! !
 
-!PgClientTest methodsFor: 'benchmarking'!
+!PgClientIntegrationTest methodsFor: 'benchmarking'!
 setupBenchmark1
 	| timeToRun |
 	self setUp. 
@@ -1149,7 +1160,7 @@ setupBenchmark1
 	self tearDown.
 	^ timeToRun  ! !
 
-!PgClientTest methodsFor: 'testing'!
+!PgClientIntegrationTest methodsFor: 'testing'!
 isServerVersionAtLeastMajor: major minor: minor
 	| serverVersion |
 	serverVersion _ ($. split: client serverVersion) collect: #asNumber.
@@ -1157,12 +1168,12 @@ isServerVersionAtLeastMajor: major minor: minor
 		or:
 			[ serverVersion first = major and: [ serverVersion second >= minor ] ]! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 11:38:06'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 11:38:06'!
 newUUID
 	self notYetImplemented 
 	! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 20:15:31'!
 testArrayTypes
 	| result |
 	client execute: 'DROP TABLE IF EXISTS table_a'.
@@ -1171,17 +1182,21 @@ testArrayTypes
 	client execute: 'INSERT INTO table_a (id, name, text_a, int_a) VALUES (2, ''null'', ''{"NULL",NULL}'', ''{0,NULL}'')'.
 	client execute: 'INSERT INTO table_a (id, name, text_a, int_a) VALUES (3, ''zero'', ''{}'', ''{}'')'.
 	client execute: 'INSERT INTO table_a (id, name, text_a, int_a) VALUES (4, ''escape'', ARRAY[''a"b'',''c\d''], ''{1,2}'')'.
+	
 	result _ client query: 'SELECT id, name, text_a, int_a FROM table_a WHERE id = 1'.
 	self assert: result firstRecord equals: #(1 'foo' #('foo' 'bar') #(1 2)).
+	
 	result _ client query: 'SELECT id, name, text_a, int_a FROM table_a WHERE id = 2'.
 	self assert: result firstRecord equals: #(2 'null' #('NULL' nil) #(0 nil)).
+	
 	result _ client query: 'SELECT id, name, text_a, int_a FROM table_a WHERE id = 3'.
 	self assert: result firstRecord equals: #(3 'zero' #() #()).
+	
 	result _ client query: 'SELECT id, name, text_a, int_a FROM table_a WHERE id = 4'.
 	self assert: result firstRecord equals: #(4 'escape' #('a"b' 'c\d') #(1 2)).
 	client execute: 'DROP TABLE table_a'! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:37:31'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:37:31'!
 testBitStringConversion
 	| result |
 	result _ client query: 'SELECT B''11001111'''.
@@ -1189,13 +1204,13 @@ testBitStringConversion
 	result _ client query: 'SELECT B''11001111''::bit varying'.
 	self assert: result firstFieldOfFirstRecord equals: (PgBitString bits: 2r11110011).! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests'!
 testBooleanConversion
 	| result |
 	result _ client query: 'SELECT b::boolean FROM (VALUES (true), (false), (NULL)) t(b)'.
 	self assert: result data equals: #((true) (false) (nil))! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:32'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:32'!
 testBoxConversion
 	| result |
 	result _ client query: 'SELECT box ''(3,4),(1,2)'''.
@@ -1211,7 +1226,7 @@ testBoxConversion
 		assert: result firstFieldOfFirstRecord 
 		equals: PgBox unit! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests'!
 testByteArrayConversion
 
 	| result bytes |
@@ -1232,7 +1247,7 @@ testByteArrayConversion
 
 	client execute: 'DROP TABLE testBytea'! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests'!
 testChronology
 	| result |
 	client execute: 'DROP TABLE IF EXISTS table1'.
@@ -1254,7 +1269,7 @@ testChronology
 	self assert: (Time now asSeconds - result firstRecord fifth asSeconds) abs < 30.
 	client execute: 'DROP TABLE table1'! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:26'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:26'!
 testCircleConversion
 	| result |
 	result _ client query: 'SELECT circle ''<(1,2),100>'''.
@@ -1270,31 +1285,33 @@ testCircleConversion
 	self assert: (result firstFieldOfFirstRecord center y closeTo: -1.5).
 	self assert: (result firstFieldOfFirstRecord radius closeTo: 20.5).! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests'!
 testConnection
 	self assert: client isConnected.
 	self assert: client isWorking.! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests'!
 testConvenienceMetaAccess
 	self deny: client listDatabases isEmpty.
 	self assert: (client listSchemas includes: 'public').
 	self assert: (client listTablesInSchema: 'public') isCollection.! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 15:24:16'!
 testEmptyString
 	| result |
 	client execute: 'DROP TABLE IF EXISTS table1'.
 	client execute: 'CREATE TABLE table1 (id INTEGER, string VARCHAR)'.
 	client execute: 'INSERT INTO table1 (id, string) VALUES (1, '''')'.
+	
 	result _ client query: 'SELECT id, string FROM table1 WHERE id = 1'.
 	self assert: result firstRecord equals: #(1 '').
 	client execute: 'INSERT INTO table1 (id, string) VALUES (2, NULL)'.
+	
 	result _ client query: 'SELECT id, string FROM table1 WHERE id = 2'.
 	self assert: result firstRecord equals: #(2 nil).
 	client execute: 'DROP TABLE table1'! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests'!
 testEnum
 	| result |
 
@@ -1315,17 +1332,17 @@ testEnum
 	
 ! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:56'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:56'!
 testError
 	self should: [ client query: 'SELECT * FROM abcdef' ] raise: PgError! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests'!
 testIntegerConversion
 	| result |
 	result _ client query: 'SELECT i::integer FROM (VALUES (-1), (1), (NULL), (1234567890)) t(i)'.
 	self assert: result data equals: #((-1) (1) (nil) (1234567890))! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:35:42'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:35:42'!
 testIntervalConversion
 	| result |
 	result _ client query: 'SELECT INTERVAL ''1 years 1 mons 1 days 1 hours 1 minutes 1 seconds'''.
@@ -1350,7 +1367,7 @@ testIntervalConversion
 		equals: (PgInterval years: -1 months: -1 days: -1 hours: -1 minutes: 1 seconds: 1).
 ! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 11:25:48'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 11:25:48'!
 testJsonConversion
 	| data result |
 	
@@ -1368,7 +1385,7 @@ testJsonConversion
 	result _ client query: ('SELECT ''{1}''::jsonb' format: { data printString }).
 	self assert: result firstFieldOfFirstRecord equals: data! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:20'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:20'!
 testLineConversion
 	| result |
 	(self isServerVersionAtLeastMajor: 9 minor: 4) ifFalse: [ ^ self skip ].
@@ -1385,7 +1402,7 @@ testLineConversion
 		assert: result firstFieldOfFirstRecord 
 		equals: PgLine yAxis.! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:11'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:11'!
 testLineSegmentConversion
 	| result |
 	result _ client query: 'SELECT lseg ''(1,2),(3,4)'''.
@@ -1401,7 +1418,7 @@ testLineSegmentConversion
 		assert: result firstFieldOfFirstRecord 
 		equals: PgLineSegment yAxisUnit ! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests'!
 testMultiStatement
 	| result |
 	client execute: 'DROP TABLE IF EXISTS table1'.
@@ -1416,7 +1433,7 @@ testMultiStatement
 	self assert: result data equals: #((1 'foo' true)(2 'bar' false)).
 	client execute: 'DROP TABLE table1'! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests'!
 testNonAsciiStrings
 	| result |
 	client execute: 'DROP TABLE IF EXISTS table1'.
@@ -1429,7 +1446,7 @@ testNonAsciiStrings
 	self assert: result firstRecord equals: {2. '100 {1}' format: { Character euro }}.
 	client execute: 'DROP TABLE table1'! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:35:15'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:35:15'!
 testNotification
 	| raised |
 	raised _ false.
@@ -1443,7 +1460,7 @@ testNotification
 			notification resume ].
 	self assert: raised description: 'no notification triggered'! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:04'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:04'!
 testPathConversion
 	| result |
 	result _ client query: 'SELECT path ''((1,2),(3,4),(5,6))'''.
@@ -1457,7 +1474,7 @@ testPathConversion
 		equals: (PgPath openPoints: { PgPoint x: 1 y: 2. PgPoint x: 3 y: 4. PgPoint x: 5 y: 6 }).
 	self assert: result firstFieldOfFirstRecord isOpen.! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:04'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:04'!
 testPointConversion
 	| result |
 	result _ client query: 'SELECT point (1,2)'.
@@ -1470,7 +1487,7 @@ testPointConversion
 	self assert: (result firstFieldOfFirstRecord x closeTo: 1.3).
 	self assert: (result firstFieldOfFirstRecord y closeTo: -1.5).! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:04'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:04'!
 testPolygonConversion
 	| result |
 	result _ client query: 'SELECT polygon ''((1,2),(3,4),(5,6))'''.
@@ -1478,7 +1495,7 @@ testPolygonConversion
 		assert: result firstFieldOfFirstRecord 
 		equals: (PgPolygon points: { PgPoint x: 1 y: 2. PgPoint x: 3 y: 4. PgPoint x: 5 y: 6 })! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests'!
 testQueryCatalog
 	| result |
 	result _ client query: 'SELECT schemaname,tablename FROM pg_catalog.pg_tables'.
@@ -1491,7 +1508,7 @@ testQueryCatalog
 	"each dataRow has two fields"
 	self assert: (result data allSatisfy: [ :each | each size = 2])! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests'!
 testSession
 
 	| session |
@@ -1526,7 +1543,7 @@ testSession
 
 ! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests'!
 testSimpleTable
 	| result |
 	client execute: 'DROP TABLE IF EXISTS table1'.
@@ -1546,30 +1563,33 @@ testSimpleTable
 	self assert: result firstRecord equals: #(2 'xxx' false).
 	client execute: 'DROP TABLE table1'! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 15:26:35'!
 testSqlFunction
 	| x y result |
 	client execute: 'DROP FUNCTION IF EXISTS my_add(x INTEGER, y INTEGER)'.
 	client execute: 'CREATE FUNCTION my_add(x INTEGER, y INTEGER) RETURNS INTEGER AS $$ SELECT x + y $$ LANGUAGE SQL'.
 	x _ 99 atRandom.
 	y _ 99 atRandom.
+	
 	result _ client query: ('SELECT my_add({1},{2}) AS answer' format: { x. y }).
 	self assert: result firstFieldOfFirstRecord equals: x + y.
 	client execute: 'DROP FUNCTION my_add(x INTEGER, y INTEGER)'.! !
 
-!PgClientTest methodsFor: 'tests'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 15:26:27'!
 testStringEscaping
 	| result string |
 	client execute: 'DROP TABLE IF EXISTS table1'.
 	client execute: 'CREATE TABLE table1 (id INTEGER, string VARCHAR)'.
 	string _ 'An SQL string with a single quote '' and a double quote ".'.
+	
 	"We can use #printString as Pharo strings are similar to SQL string"
 	client execute: ('INSERT INTO table1 (id, string) VALUES ({1}, {2})' format: { 1. string printString }).
+	
 	result _ client query: 'SELECT id, string FROM table1 WHERE id = 1'.
 	self assert: result firstRecord equals: { 1. string }.
 	client execute: 'DROP TABLE table1'! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 11:50:44'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 11:50:44'!
 testTimeConversion
 	| result offset formattedOffset |
 	"TIME WITHOUT TIME ZONE maps 1 on 1"
@@ -1594,21 +1614,23 @@ testTimeConversion
 		assert: result firstFieldOfFirstRecord 
 		equals: ((Time hour: 1 minute: 2 second: 3) + offset).! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 11:22:04'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 15:25:58'!
 testTimeout
 	"Reconnect with an explicit timeout"
 	client close.
 	client url: Url.
 	client timeout: 1. "second"
 	self assert: client isWorking.
+	
 	"The following (sleeping for 0.5 seconds) should just pass successfully"
 	client execute: 'SELECT pg_sleep(0.5)'.
+	
 	"While the following (sleeping for 1.5 seconds) should time out"
 	self
 		should: [ client execute: 'SELECT pg_sleep(1.5)' ]
 		raise: PgConnectionTimeout! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 11:58:12'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 15:26:12'!
 testTimezone
 	| result originalTimezone |
 	client execute: 'DROP TABLE IF EXISTS table1'.
@@ -1631,18 +1653,21 @@ testTimezone
 	client execute: ('INSERT INTO table1 (name) VALUES (''{1}'')' format: { client converter timezone id }).
 	result _ client query: 'SELECT id, name, t1, t2 FROM table1 WHERE id = 1'.
 	self assert: result firstRecord first equals: 1.
+	
 	"t1 is now off, since postgres did not adjust it"
 	self assert: (DateAndTime now asUTC - result firstRecord fourth) abs < 30 seconds.
+	
 	result _ client query: 'SELECT id, name, t1, t2 FROM table1 WHERE id = 2'.
 	self assert: result firstRecord first equals: 2.
 	self assert: result firstRecord second equals: client converter timezone id.
 	self assert: (DateAndTime now asUTC - result firstRecord third) abs < 30 seconds.
 	self assert: (DateAndTime now asUTC - result firstRecord fourth) abs < 30 seconds.
+	
 	client execute: ('SET TIMEZONE TO ''{1}''' format: { originalTimezone }).
 	client converter timezone: (client findTimezoneById: originalTimezone).
 	client execute: 'DROP TABLE table1'! !
 
-!PgClientTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 11:37:55'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 11:37:55'!
 testUuid
 
 	| result uuid num |
@@ -1660,36 +1685,19 @@ testUuid
 	
 	client execute: 'DROP TABLE testUUID'! !
 
-!PgClientTest methodsFor: 'running' stamp: 'jpb 1/6/2021 10:37:17'!
+!PgClientIntegrationTest methodsFor: 'running' stamp: 'jpb 1/6/2021 10:37:17'!
 setUp
 	super setUp.
 	client _ PgClient new.
 	client url: self class url.
 	client connect! !
 
-!PgClientTest methodsFor: 'running'!
+!PgClientIntegrationTest methodsFor: 'running'!
 tearDown
 	client close.
 	super tearDown! !
 
-!PgClientTest class methodsFor: 'accessing'!
-url
-	"Return the default connection URL to use for P3 clients in the unit tests.
-	Note that the default here corresponds to the default on Travis CI's postgresql service,
-	user postgres with a blank password on localhost.
-	You should set an appropriate connection string yourself, see #url:"
-	
-	^ Url ifNil: [ Url _ 'psql://postgres@localhost' ]! !
-
-!PgClientTest class methodsFor: 'accessing'!
-url: stringOrUrl
-	"Set the connection URL to be used for P3 Clients in the unit tests.
-	The general syntax is psql://sven:secret@localhost:5432/database
-	The minimal form is psql://user@localhost (a user, blank password, localhost)"
-	
-	Url _ stringOrUrl asUrl! !
-
-!PgConnectionPoolTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:56'!
+!PgConnectionPoolIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:56'!
 testError
 	self assert: pool size equals: 0.
 	self 
@@ -1698,7 +1706,7 @@ testError
 		raise: PgError.
 	self assert: pool size equals: 0! !
 
-!PgConnectionPoolTest methodsFor: 'tests'!
+!PgConnectionPoolIntegrationTest methodsFor: 'tests'!
 testOne
 	self assert: pool size equals: 0.
 	self 
@@ -1711,7 +1719,7 @@ testOne
 		equals: 8.
 	self assert: pool size equals: 1! !
 
-!PgConnectionPoolTest methodsFor: 'tests'!
+!PgConnectionPoolIntegrationTest methodsFor: 'tests'!
 testWarmUp
 	self assert: pool size equals: 0.
 	pool warmUp.
@@ -1722,17 +1730,17 @@ testWarmUp
 	pool close.
 	self assert: pool size equals: 0! !
 
-!PgConnectionPoolTest methodsFor: 'running' stamp: 'jpb 1/6/2021 10:38:15'!
+!PgConnectionPoolIntegrationTest methodsFor: 'running' stamp: 'jpb 1/6/2021 17:06:01'!
 setUp
 	super setUp.
 	pool _ PgConnectionPool new.
-	pool url: PgClientTest url! !
+	pool url: PgClientIntegrationTest url! !
 
-!PgConnectionPoolTest methodsFor: 'running'!
+!PgConnectionPoolIntegrationTest methodsFor: 'running'!
 tearDown
 	pool close! !
 
-!PgFormattedStatementTest methodsFor: 'testing'!
+!PgFormattedStatementIntegrationTest methodsFor: 'testing'!
 isServerVersionAtLeastMajor: major minor: minor
 	| serverVersion |
 	serverVersion _ ($. split: client serverVersion) collect: #asNumber.
@@ -1740,19 +1748,19 @@ isServerVersionAtLeastMajor: major minor: minor
 		or:
 			[ serverVersion first = major and: [ serverVersion second >= minor ] ]! !
 
-!PgFormattedStatementTest methodsFor: 'running' stamp: 'jpb 1/6/2021 10:38:15'!
+!PgFormattedStatementIntegrationTest methodsFor: 'running' stamp: 'jpb 1/6/2021 17:06:01'!
 setUp
 	super setUp.
 	client _ PgClient new.
-	client url: PgClientTest url.
+	client url: PgClientIntegrationTest url.
 	client connect! !
 
-!PgFormattedStatementTest methodsFor: 'running'!
+!PgFormattedStatementIntegrationTest methodsFor: 'running'!
 tearDown
 	client close.
 	super tearDown! !
 
-!PgFormattedStatementTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:37:31'!
+!PgFormattedStatementIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:37:31'!
 testBitString
 	| statement bitString fixedBitString result |
 	
@@ -1772,7 +1780,7 @@ testBitString
 	
 	client execute: 'DROP TABLE testBits'! !
 
-!PgFormattedStatementTest methodsFor: 'tests'!
+!PgFormattedStatementIntegrationTest methodsFor: 'tests'!
 testByteArray
 	| statement bytes result |
 	
@@ -1791,7 +1799,7 @@ testByteArray
 	
 	client execute: 'DROP TABLE testBytea'! !
 
-!PgFormattedStatementTest methodsFor: 'tests'!
+!PgFormattedStatementIntegrationTest methodsFor: 'tests'!
 testChronology
 	| result statement |
 	client execute: 'DROP TABLE IF EXISTS table1'.
@@ -1814,7 +1822,7 @@ testChronology
 	self assert: (Time now asSeconds - result firstRecord fifth asSeconds) abs < 30.
 	client execute: 'DROP TABLE table1'! !
 
-!PgFormattedStatementTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:32'!
+!PgFormattedStatementIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:32'!
 testGeometricTypes
 	| p1 p2 p3 points row1 row2 row3 statement result |
 	(self isServerVersionAtLeastMajor: 9 minor: 4) ifFalse: [ ^ self skip ].
@@ -1841,7 +1849,7 @@ testGeometricTypes
 	
 	client execute: 'DROP TABLE table1'! !
 
-!PgFormattedStatementTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:34:44'!
+!PgFormattedStatementIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:34:44'!
 testInClause
 	| statement result |
 	
@@ -1869,7 +1877,7 @@ testInClause
 	statement close.
 	client execute: 'DROP TABLE table1'.! !
 
-!PgFormattedStatementTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:35:42'!
+!PgFormattedStatementIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:35:42'!
 testInterval
 	| statement intervals result |
 	
@@ -1886,7 +1894,7 @@ testInterval
 	
 	client execute: 'DROP TABLE table1'! !
 
-!PgFormattedStatementTest methodsFor: 'tests'!
+!PgFormattedStatementIntegrationTest methodsFor: 'tests'!
 testNull
 	| statement result |
 	
@@ -1902,7 +1910,7 @@ testNull
 	
 	client execute: 'DROP TABLE table1'! !
 
-!PgFormattedStatementTest methodsFor: 'tests'!
+!PgFormattedStatementIntegrationTest methodsFor: 'tests'!
 testSimple
 	| statement result |
 	
@@ -1928,7 +1936,7 @@ testSimple
 	
 	client execute: 'DROP TABLE table1'! !
 
-!PgFormattedStatementTest methodsFor: 'tests'!
+!PgFormattedStatementIntegrationTest methodsFor: 'tests'!
 testStrings
 	| statement string result |
 	
@@ -1947,7 +1955,7 @@ testStrings
 	
 	client execute: 'DROP TABLE table1'! !
 
-!PgPreparedStatementTest methodsFor: 'testing'!
+!PgPreparedStatementIntegrationTest methodsFor: 'testing'!
 isServerVersionAtLeastMajor: major minor: minor
 	| serverVersion |
 	serverVersion _ ($. split: client serverVersion) collect: #asNumber.
@@ -1955,7 +1963,7 @@ isServerVersionAtLeastMajor: major minor: minor
 		or:
 			[ serverVersion first = major and: [ serverVersion second >= minor ] ]! !
 
-!PgPreparedStatementTest methodsFor: 'tests'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests'!
 testBatchInsertStatement
 
 	| statement result |
@@ -1976,7 +1984,7 @@ testBatchInsertStatement
 	
 	statement close.! !
 
-!PgPreparedStatementTest methodsFor: 'tests'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests'!
 testBinaryColumn
 
 	| statement result |
@@ -1997,7 +2005,7 @@ testBinaryColumn
 	self assert: #( #[ 100 102 104 106 108 100 102 104 106 108 ] ) equals: (result at: 2) firstRecord.
 	! !
 
-!PgPreparedStatementTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:37:31'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:37:31'!
 testBitString
 	| statement bitString fixedBitString result |
 	
@@ -2017,7 +2025,7 @@ testBitString
 	
 	client execute: 'DROP TABLE testBits'! !
 
-!PgPreparedStatementTest methodsFor: 'tests'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests'!
 testBulkInsertAndSelect
 
 	| insertStatement result selectStatement |
@@ -2044,7 +2052,7 @@ testBulkInsertAndSelect
 	insertStatement close.
 	selectStatement close.! !
 
-!PgPreparedStatementTest methodsFor: 'tests'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests'!
 testChronology
 	| result statement |
 	client execute: 'DROP TABLE IF EXISTS table1'.
@@ -2069,7 +2077,7 @@ testChronology
 	self assert: (Time now asSeconds - result firstRecord fifth asSeconds) abs < 30.
 	client execute: 'DROP TABLE table1'! !
 
-!PgPreparedStatementTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:32'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:36:32'!
 testGeometricTypes
 	| p1 p2 p3 points row1 row2 row3 statement result |
 	(self isServerVersionAtLeastMajor: 9 minor: 4) ifFalse: [ ^ self skip ].
@@ -2096,7 +2104,7 @@ testGeometricTypes
 	
 	client execute: 'DROP TABLE table1'! !
 
-!PgPreparedStatementTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:34:44'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:34:44'!
 testInClause
 	| statement result |
 	
@@ -2124,7 +2132,7 @@ testInClause
 	statement close.
 	client execute: 'DROP TABLE table1'.! !
 
-!PgPreparedStatementTest methodsFor: 'tests'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests'!
 testInsertNull
 
 	| statement result |
@@ -2144,7 +2152,7 @@ testInsertNull
 	
 	statement close.! !
 
-!PgPreparedStatementTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:35:42'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 10:35:42'!
 testInterval
 	| statement intervals result |
 	
@@ -2161,7 +2169,7 @@ testInterval
 	
 	client execute: 'DROP TABLE table1'! !
 
-!PgPreparedStatementTest methodsFor: 'tests'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests'!
 testLongQueries
 	"Test fix for issue: Prepared statements error when query is long and differs slightly at the end
 	https://github.com/svenvc/P3/issues/20"
@@ -2192,7 +2200,7 @@ testLongQueries
 	select1 close.
 	select2 close.! !
 
-!PgPreparedStatementTest methodsFor: 'tests'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests'!
 testMultipleInsertStatements
 
 	| statement1 statement2 |
@@ -2213,7 +2221,7 @@ testMultipleInsertStatements
 	
 ! !
 
-!PgPreparedStatementTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 11:32:25'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 11:32:25'!
 testNamedPreparedStatement
 	| result |
 	
@@ -2247,7 +2255,7 @@ testNamedPreparedStatement
 	
 	(client preparedStatementNamed: 'table1_select1') close.! !
 
-!PgPreparedStatementTest methodsFor: 'tests'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests'!
 testScaledDecimal
 
 	| statement result |
@@ -2273,7 +2281,7 @@ testScaledDecimal
 
 ! !
 
-!PgPreparedStatementTest methodsFor: 'tests'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests'!
 testSelectStatement
 
 	| statement result |
@@ -2301,7 +2309,7 @@ testSelectStatement
 	
 	statement close.! !
 
-!PgPreparedStatementTest methodsFor: 'tests'!
+!PgPreparedStatementIntegrationTest methodsFor: 'tests'!
 testSimpleInsertStatement
 
 	| statement result |
@@ -2322,15 +2330,15 @@ testSimpleInsertStatement
 	result _ client query: 'SELECT id, name, enabled FROM table1 ORDER BY id'.
 	self assert: result records size equals: 4.! !
 
-!PgPreparedStatementTest methodsFor: 'running' stamp: 'jpb 1/6/2021 10:38:15'!
+!PgPreparedStatementIntegrationTest methodsFor: 'running' stamp: 'jpb 1/6/2021 17:06:01'!
 setUp
 	super setUp.
 	client _ PgClient new.
-	client url: PgClientTest url.
+	client url: PgClientIntegrationTest url.
 	client timeout: 10. "second"
 	client connect! !
 
-!PgPreparedStatementTest methodsFor: 'running'!
+!PgPreparedStatementIntegrationTest methodsFor: 'running'!
 tearDown
 	client close.
 	super tearDown! !
@@ -2526,6 +2534,28 @@ bits: integer count: count
 		size: count;
 		yourself! !
 
+!PgCharacterEncoder methodsFor: 'as yet unclassified' stamp: 'jpb 1/7/2021 19:49:24'!
+newStringFrom: byteArray
+	^streamReader value: byteArray! !
+
+!PgCharacterEncoder methodsFor: 'as yet unclassified' stamp: 'jpb 1/7/2021 19:39:42'!
+readFrom: aStream
+	"Reads from a binary Stream a new String"
+	^streamReader value: aStream! !
+
+!PgCharacterEncoder methodsFor: 'as yet unclassified' stamp: 'jpb 1/7/2021 19:39:57'!
+streamReader: newStreamReader
+	streamReader _ newStreamReader ! !
+
+!PgCharacterEncoder methodsFor: 'as yet unclassified' stamp: 'jpb 1/7/2021 19:40:13'!
+stringEncoder: newEncoder
+	stringEncoder _ newEncoder ! !
+
+!PgCharacterEncoder methodsFor: 'as yet unclassified' stamp: 'jpb 1/7/2021 19:39:27'!
+value: someString
+	"Encodes the given string to a ByteArray"
+	^stringEncoder value: someString! !
+
 !PgClient methodsFor: 'error handling'!
 errorNoticeInfo: payload
 	| info fieldType |
@@ -2543,19 +2573,21 @@ signal: exceptionClass using: info
 		info: info; 
 		signal! !
 
-!PgClient methodsFor: 'private messages' stamp: 'jpb 1/6/2021 10:36:56'!
+!PgClient methodsFor: 'private messages' stamp: 'jpb 1/7/2021 18:42:02'!
 clearTextPasswordMessage
-	self password ifNil: [ PgError passwordRequired signal ].
-	^ self asCString: self password! !
+	^ self asCString: (settings at: #password)! !
 
-!PgClient methodsFor: 'private messages' stamp: 'jpb 1/6/2021 11:17:16'!
+!PgClient methodsFor: 'private messages' stamp: 'jpb 1/7/2021 18:47:51'!
 md5PasswordMessage: salt
 	"concat('md5', md5(concat(md5(concat(password, username)), random-salt))).
 	Keep in mind the md5() function returns its result as a hex string."
 	
-	| credential salted |
-	self password ifNil: [ PgError passwordRequired signal ].
-	credential _ (self hashMessageWithMD5: self password , self user) hex.
+	| credential salted password user |
+	password _ settings at: #password.
+	user _ settings at: #user.
+	
+	password ifNil: [ PgError passwordRequired signal ].
+	credential _ (self hashMessageWithMD5: password , user) hex.
 	salted _ (self hashMessageWithMD5: credential , salt) hex.
 	
 	^ self asCString: 'md5' , salted! !
@@ -2564,15 +2596,21 @@ md5PasswordMessage: salt
 sslRequestMessage
 	^ #[4 210 22 47] "1234 5678"! !
 
-!PgClient methodsFor: 'private messages'!
+!PgClient methodsFor: 'private messages' stamp: 'jpb 1/7/2021 18:48:13'!
 startupMessage
 	^ ByteArray streamContents: [ :out |
+			| database user |
+			database _ settings at: #database.
+			user _ settings at: #user.
+		
 			out nextPutAll: #[ 0 3 0 0 ]. "Protocol major.minor 3.0"
 			out nextPutAll: (self asCString: 'user').
-			out nextPutAll: (self asCString: self user).
-			self database ifNotNil: [ 
+			out nextPutAll: (self asCString: user).
+			
+			database ifNotNil: [ 
 				out nextPutAll: (self asCString: 'database').
-				out nextPutAll: (self asCString: self database) ].
+				out nextPutAll: (self asCString: database) ].
+			
 			out nextPut: 0 ]! !
 
 !PgClient methodsFor: 'configuration'!
@@ -2695,14 +2733,18 @@ writeParseMessage: queryString name: statementName types: paramDataTypes
 
 	! !
 
-!PgClient methodsFor: 'input/output'!
+!PgClient methodsFor: 'input/output' stamp: 'jpb 1/7/2021 19:26:19'!
 writeQueryMessage: queryString
-	| encoder size |
-	connection nextPut: $Q asInteger.
+	| encoder size encodedQuery |
+	connection nextPut: 81. "ASCII value for Q"
 	encoder _ self converter encoder.
-	size _ (encoder encodedByteCountForString: queryString) + 5.
+	encodedQuery _ encoder value: queryString.
+	
+	size _ encodedQuery size + 5.
+	
 	4 to: 1 by: -1 do: [ :index | connection nextPut: (size digitAt: index) ].
-	queryString do: [ :each | encoder nextPut: each toStream: connection ].
+	connection nextPutAll: encodedQuery.
+	
 	connection nextPut: 0.
 	connection flush! !
 
@@ -2725,34 +2767,6 @@ converter
 	It holds the character encoding and timezone of the current database connection."
 	
 	^ converter ifNil: [ converter _ PgConverter new ]! !
-
-!PgClient methodsFor: 'accessing'!
-database
-	"Return the database name I (want to) connect to.
-	For the default, nil is used."
-	
-	^ settings at: #database ifAbsent: [ nil ]! !
-
-!PgClient methodsFor: 'accessing'!
-host
-	"Return the host name I (want to) connect to.
-	The default is localhost."
-
-	^ settings at: #host ifAbsentPut: [ 'localhost' ]! !
-
-!PgClient methodsFor: 'accessing'!
-password
-	"Return the password  of my database connection.
-	For no password, nil is used."
-
-	^ settings at: #password ifAbsent: [ nil ]! !
-
-!PgClient methodsFor: 'accessing'!
-port
-	"Return the port I (want to) connect to.
-	The default is 5432."
-
-	^ settings at: #port ifAbsentPut: [ 5432 ]! !
 
 !PgClient methodsFor: 'accessing' stamp: 'jpb 1/6/2021 11:32:08'!
 preparedStatementNamed: name
@@ -2810,31 +2824,6 @@ session
 	self isConnected ifFalse: [ session _ nil ].
 	
 	^ session! !
-
-!PgClient methodsFor: 'accessing'!
-timeout
-	"Return the timeout in seconds I (want to) use, the default being 10 seconds."
-	
-	^ settings at: #timeout ifAbsentPut: [ 10 ]! !
-
-!PgClient methodsFor: 'accessing' stamp: 'jpb 1/6/2021 12:25:43'!
-url
-	"Return my connection URL"
-	
-	^ PgSystemAdapter current
-		newUrlWithScheme: #psql
-		host: self host
-		port: self port
-		username: self user
-		password: self password
-		path: (self database ifNotNil: [ { self database } ] ifNil: [ #() ])! !
-
-!PgClient methodsFor: 'accessing'!
-user
-	"Return the user of my database connection.
-	For the default, nil is used."
-
-	^ settings at: #user ifAbsent: [ nil ]! !
 
 !PgClient methodsFor: 'private'!
 asCString: string
@@ -2899,21 +2888,22 @@ newMessageBuilder
 
 	^ PgMessageBuilder newWithEncoder: self converter encoder! !
 
-!PgClient methodsFor: 'private'!
+!PgClient methodsFor: 'private' stamp: 'jpb 1/7/2021 19:11:50'!
 processBackendKeyData: payload
 
-	session _ payload uint32.
+	session _ payload  nextUnsignedInt32BigEndian: true.
 	properties at: 'backend_process_id' put: session.
-	properties at: 'backend_secret_key' put: payload uint32! !
+	properties at: 'backend_secret_key' put: (payload nextUnsignedInt32BigEndian: true).! !
 
-!PgClient methodsFor: 'private'!
+!PgClient methodsFor: 'private' stamp: 'jpb 1/7/2021 19:53:06'!
 processDataRowUsing: description
 	| count record readStream |
 	readStream _ message readStream.
-	count _ readStream uint16.
+	count _ readStream nextUnsignedInt16BigEndian: true.
 	record _ Array new: count.
+	
 	1 to: count do: [ :index | | size |
-		size _ readStream uint32.
+		size _ readStream nextUnsignedInt32BigEndian: true.
 		size = 16rFFFFFFFF
 			ifFalse: [ | object |
 				object _ (description at: index) convert: readStream length: size using: converter.
@@ -2941,21 +2931,23 @@ processParameterStatus: payload
 		
 	properties at: key put: value! !
 
-!PgClient methodsFor: 'private' stamp: 'jpb 1/6/2021 10:34:53'!
+!PgClient methodsFor: 'private' stamp: 'jpb 1/7/2021 19:52:38'!
 processRowDescription: payload
 	| count |
-	count _ payload uint16.
-	^ Array new: count streamContents: [ :out |
+	count _ payload nextUnsignedInt16BigEndian: true.
+	
+	^ Array streamContents: [ :out |
 			count timesRepeat: [ 
 				out nextPut: (PgRowFieldDescription new
 					fieldName: (self converter encodedCStringFrom: payload);
-					tableOid: payload uint32;
-					attributeNumber: payload uint16;
-					typeOid: payload uint32;
-					typeSize: payload uint16;
-					typeModifier: payload uint32;
-					format: payload uint16;
-					yourself) ] ]! !
+					tableOid: (payload nextUnsignedInt32BigEndian: true);
+					attributeNumber: (payload nextUnsignedInt16BigEndian: true);
+					typeOid: (payload nextUnsignedInt32BigEndian: true);
+					typeSize: (payload nextUnsignedInt16BigEndian: true);
+					typeModifier: (payload nextUnsignedInt32BigEndian: true);
+					format: (payload nextUnsignedInt16BigEndian: true);
+					yourself) ] ]
+			limitedTo: count.! !
 
 !PgClient methodsFor: 'private'!
 reset
@@ -3024,12 +3016,13 @@ runExtendedQueryResults: fieldDescriptions
 	
 	^ results! !
 
-!PgClient methodsFor: 'protocol' stamp: 'jpb 1/6/2021 10:34:33'!
+!PgClient methodsFor: 'protocol' stamp: 'jpb 1/7/2021 18:57:16'!
 runQueryResult
 	| result |
 	result _ PgResult new.
 	self readMessage tag = $T
 		ifTrue: [ result descriptions: (self processRowDescription: message readStream) ].
+		
 	message tag = $C ifFalse: [ 
 		result data: (Array streamContents: [ :out |
 			[ self readMessage tag = $C ] whileFalse: [ 
@@ -3040,12 +3033,13 @@ runQueryResult
 		self readMessage tag = $Z ] whileFalse.
 	^ result! !
 
-!PgClient methodsFor: 'protocol' stamp: 'jpb 1/6/2021 10:36:56'!
+!PgClient methodsFor: 'protocol' stamp: 'jpb 1/7/2021 18:57:32'!
 runStartup
 	session _ 999999 atRandom. "Sometimes $K is not sent and we need a nonNil session"
 	[
 	self readMessageCloseAfterError tag = $Z
 		ifTrue: [ ^ self ].
+		
 	message tag = $S
 		ifTrue: [ self processParameterStatus: message readStream ]
 		ifFalse: [  
@@ -3079,80 +3073,40 @@ close
 			connection _ nil ]! !
 
 !PgClient methodsFor: 'initialize-release'!
-database: string
-	"Set the name of the database to connect to.
-	Set to nil or do not set to use the default."
-	
-	settings at: #database put: string! !
-
-!PgClient methodsFor: 'initialize-release'!
-host: string
-	"Set the name of the host to connect to.
-	If not set, defaults to localhost."
-	
-	settings at: #host put: string! !
-
-!PgClient methodsFor: 'initialize-release'!
 initialize
 	super initialize.
 	
 	settings _ IdentityDictionary new.
 	properties _ Dictionary new.! !
 
-!PgClient methodsFor: 'initialize-release' stamp: 'jpb 1/6/2021 12:08:32'!
+!PgClient methodsFor: 'initialize-release' stamp: 'jpb 1/7/2021 19:03:42'!
+initializeWith: configurator
+	self initialize.
+	
+	settings at: #port put: (configurator at: #port).
+	settings at: #host put: (configurator at: #host).
+	settings at: #password put: (configurator at: #password).
+	settings at: #user put: (configurator at: #user).
+	settings at: #database put: (configurator at: #database).
+	settings at: #timeout put: (configurator at: #timeout).! !
+
+!PgClient methodsFor: 'initialize-release' stamp: 'jpb 1/7/2021 18:40:15'!
 open
 	"Open my connection with the server (do not yet #connect)"
 	
 	self close.
-	connection _ PgSystemAdapter current
-		openConnectionToHostNamed: self host
-		port: self port
-		timeout: self timeout.
+	connection _ self openNewConnection.
 		
 	message _ PgMessageBuffer new
 ! !
 
-!PgClient methodsFor: 'initialize-release'!
-password: string
-	"Set the password to use when connecting.
-	Set to nil or don't set to use no password."
-
-	settings at: #password put: string! !
-
-!PgClient methodsFor: 'initialize-release'!
-port: integer
-	"Set the port to connect to.
-	If not set, defaults to 5432."
-	
-	settings at: #port put: integer! !
-
-!PgClient methodsFor: 'initialize-release'!
-timeout: seconds
-
-	settings at: #timeout put: seconds! !
-
-!PgClient methodsFor: 'initialize-release'!
-url: stringOrUrl
-	"Set my connection settings from stringOrUrl according to the format
-	psql://username:password@localhost:5432/databasename 
-	with the minimum being psql://user@localhost"
-	
-	| url |
-	url _ stringOrUrl asUrl.
-	self assert: url scheme = #psql.
-	self
-		host: url host;
-		port: (url portIfAbsent: [ 5432 ]);
-		user: url username;
-		password: url password;
-		database: url firstPathSegment ! !
-
-!PgClient methodsFor: 'initialize-release'!
-user: string
-	"Set the user to use when connecting.
-	Set to nil or don't set to use the default."
-	
-	settings at: #user put: string! !
+!PgClient methodsFor: 'initialize-release' stamp: 'jpb 1/7/2021 18:40:29'!
+openNewConnection
+	"Returns a new connection to the remote host"
+	 ^PgSystemAdapter current
+		openConnectionToHostNamed: (settings at: #host)
+		port: (settings at: #port)
+		timeout: (settings at: #timeout).! !
 
 !PgClient methodsFor: 'public'!
 connect
@@ -3306,9 +3260,14 @@ isWorking
 hashMessageWithMD5: plainMessage
 	^PgSystemAdapter current hashMessageWithMD5: plainMessage! !
 
-!PgClient class methodsFor: 'instance creation'!
-url: anUrl
-	^ self new url: anUrl ! !
+!PgClient class methodsFor: 'as yet unclassified' stamp: 'jpb 1/7/2021 19:00:19'!
+newFrom: configurator
+	"Returns a new client based on the given configuration"
+	| newClient |
+	newClient _ self basicNew.
+	newClient initializeWith: configurator.
+	
+	^newClient! !
 
 !PgConnectionPool methodsFor: 'public'!
 acquireConnection
@@ -3457,12 +3416,14 @@ asciiCStringFrom: binaryStream
 		whileFalse: [ asciiWriteStream nextPut: byte asCharacter ].
 	^ asciiWriteStream contents! !
 
-!PgConverter methodsFor: 'input/output'!
+!PgConverter methodsFor: 'input/output' stamp: 'jpb 1/7/2021 19:49:55'!
 encodedCStringFrom: binaryStream
 	stringWriteStream reset.
+	
 	[ binaryStream peekFor: 0 ]
-		whileFalse: [ stringWriteStream nextPut: (encoder nextFromStream: binaryStream) ].
-	^ stringWriteStream contents! !
+		whileFalse: [ stringWriteStream nextPut: binaryStream next ].
+	
+	^encoder newStringFrom: stringWriteStream contents.! !
 
 !PgConverter methodsFor: 'accessing' stamp: 'jpb 1/6/2021 12:10:09'!
 encoder
@@ -3630,12 +3591,12 @@ findTimezoneByName: timezoneName
 	^PgSystemAdapter current
 		findTimezoneByName: timezoneName! !
 
-!PgConverter methodsFor: 'initialize'!
+!PgConverter methodsFor: 'initialize' stamp: 'jpb 1/7/2021 19:47:31'!
 initialize
 	super initialize.
 	asciiReadStream _ String new readStream.
 	asciiWriteStream _ String new writeStream.
-	stringWriteStream _ String new writeStream.
+	stringWriteStream _ ByteArray new writeStream.
 	self initializeTypeMap! !
 
 !PgConverter methodsFor: 'initialize' stamp: 'jpb 1/6/2021 11:41:34'!
@@ -3712,15 +3673,17 @@ convertScaledDecimalFrom: bytes length: length description: description
 		length: length
 		description: description! !
 
-!PgConverter methodsFor: 'converting'!
+!PgConverter methodsFor: 'converting' stamp: 'jpb 1/7/2021 19:51:25'!
 convertStringFrom: bytes length: length description: description
 	| endPosition |
 	length = 0 ifTrue: [ ^ '' ].
 	endPosition _ bytes position + length.
 	stringWriteStream reset.
-	[ stringWriteStream nextPut: (encoder nextFromStream: bytes) ]
-			doWhileTrue: [ bytes position < endPosition ].
-	^ stringWriteStream contents! !
+	
+	[ bytes position < endPosition ]
+		whileTrue: [ stringWriteStream nextPut: bytes next ].
+
+	^ encoder newStringFrom: stringWriteStream contents! !
 
 !PgConverter methodsFor: 'converting'!
 convertSymbolFrom: bytes length: length description: description
@@ -4962,11 +4925,11 @@ columns
 
 	^ descriptions! !
 
-!PgResult methodsFor: 'convenience'!
+!PgResult methodsFor: 'convenience' stamp: 'jpb 1/7/2021 19:55:05'!
 firstColumnData
 	"Return a flat collection of the data in the first column that I hold"
 	
-	^ data collect: #first! !
+	^ data collect: [:record | record first ]! !
 
 !PgResult methodsFor: 'convenience'!
 firstFieldOfFirstRecord
@@ -5225,9 +5188,9 @@ newUrlWithScheme: newScheme host: newHost port: newPort username: newUsername pa
 	"Creates a new URL object based on the given specification"
 	self notYetImplemented ! !
 
-!PgSystemAdapter methodsFor: 'as yet unclassified' stamp: 'jpb 1/6/2021 12:07:58'!
+!PgSystemAdapter methodsFor: 'as yet unclassified' stamp: 'jpb 1/7/2021 19:08:49'!
 openConnectionToHostNamed: newHost port: newPort timeout: newTimeout
-	self notYetImplemented ! !
+	self subclassResponsibility ! !
 
 !PgSystemAdapter methodsFor: 'as yet unclassified' stamp: 'jpb 1/6/2021 12:01:58'!
 upgradeConnectionToTLS: oldConnection
@@ -5239,6 +5202,43 @@ current
 	instance ifNil: [ instance _ self new ].
 	
 	^instance! !
+
+!PgSystemAdapter class methodsFor: 'as yet unclassified' stamp: 'jpb 1/7/2021 19:05:37'!
+selectCuis
+	instance _ PgCuisAdapter new! !
+
+!PgCuisAdapter methodsFor: 'as yet unclassified' stamp: 'jpb 1/7/2021 19:40:49'!
+findCharacterEncoderByName: aString 
+	
+	'UTF8' = aString ifTrue: [ ^ self findUTF8Encoder ].
+
+	self error: 'Unknown encoding: ' , aString.! !
+
+!PgCuisAdapter methodsFor: 'as yet unclassified' stamp: 'jpb 1/7/2021 19:15:11'!
+findTimezoneByName: aSymbol 
+	#current = aSymbol ifTrue: [ ^ TimeZone default ].
+	
+	self error: 'Unknown time zone ' , aSymbol.! !
+
+!PgCuisAdapter methodsFor: 'as yet unclassified' stamp: 'jpb 1/7/2021 19:43:22'!
+findUTF8Encoder
+	| encoder |
+	encoder _ PgCharacterEncoder new.
+	encoder stringEncoder: [ :string | string asUtf8 ].
+	encoder streamReader: [ :byteArray | String fromUtf8: byteArray ].
+	
+	^encoder! !
+
+!PgCuisAdapter methodsFor: 'as yet unclassified' stamp: 'jpb 1/7/2021 19:09:34'!
+openConnectionToHostNamed: newHost port: newPort timeout: newTimeout
+	| newStream |
+	newStream _ SocketStream
+		openConnectionToHost: newHost
+		port: newPort
+		timeout: newTimeout.
+		
+	newStream binary.
+	^newStream! !
 
 !PgValuesArray methodsFor: 'testing'!
 isEmpty
