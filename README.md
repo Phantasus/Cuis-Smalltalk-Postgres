@@ -12,6 +12,7 @@ Experimental, DO NOT USE THIS IN PRODUCTION. Design work IN PROGRESS.
 
 # Basic Usage
 
+For a locally running PostgreSQL database you can do:
 
 ```Smalltalk
 settings _  IdentityDictionary new.
@@ -46,4 +47,4 @@ MIT License
 # Authors
 
 - Josef Philip Bernhart (jpb)
-- Sven Van Caekenberghe (Author of P3 for Pharo Smalltalk)b
+- Sven Van Caekenberghe (Author of P3 for Pharo Smalltalk)
