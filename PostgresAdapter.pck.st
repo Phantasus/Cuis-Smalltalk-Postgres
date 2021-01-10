@@ -1,10 +1,10 @@
-'From Cuis 5.0 [latest update: #4507] on 9 January 2021 at 10:35:01 pm'!
+'From Cuis 5.0 [latest update: #4507] on 10 January 2021 at 1:04:37 pm'!
 'Description Cuis PostgreSQL adapter used for connecting to a PostgreSQL database using protocol V3
 
 License: MIT License
 Author: Josef Philip Bernhart
 P3 Author: Sven Van Caekenberghe'!
-!provides: 'PostgresAdapter' 1 42!
+!provides: 'PostgresAdapter' 1 47!
 !requires: 'Network-Kernel' 1 5 nil!
 SystemOrganization addCategory: 'PostgresAdapter-Tests'!
 SystemOrganization addCategory: 'PostgresAdapter'!
@@ -70,18 +70,18 @@ TestCase subclass: #PgArrayValueParserTest
 PgArrayValueParserTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgIntegrationTestBase category: 'PostgresAdapter-Tests'!
-TestCase subclass: #PgIntegrationTestBase
+!classDefinition: #PgTestCaseBase category: 'PostgresAdapter-Tests'!
+TestCase subclass: #PgTestCaseBase
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter-Tests'!
-!classDefinition: 'PgIntegrationTestBase class' category: 'PostgresAdapter-Tests'!
-PgIntegrationTestBase class
+!classDefinition: 'PgTestCaseBase class' category: 'PostgresAdapter-Tests'!
+PgTestCaseBase class
 	instanceVariableNames: ''!
 
 !classDefinition: #PgClientIntegrationTest category: 'PostgresAdapter-Tests'!
-PgIntegrationTestBase subclass: #PgClientIntegrationTest
+PgTestCaseBase subclass: #PgClientIntegrationTest
 	instanceVariableNames: 'client'
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -91,7 +91,7 @@ PgClientIntegrationTest class
 	instanceVariableNames: ''!
 
 !classDefinition: #PgConnectionPoolIntegrationTest category: 'PostgresAdapter-Tests'!
-PgIntegrationTestBase subclass: #PgConnectionPoolIntegrationTest
+PgTestCaseBase subclass: #PgConnectionPoolIntegrationTest
 	instanceVariableNames: 'pool'
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -101,7 +101,7 @@ PgConnectionPoolIntegrationTest class
 	instanceVariableNames: ''!
 
 !classDefinition: #PgFormattedStatementIntegrationTest category: 'PostgresAdapter-Tests'!
-PgIntegrationTestBase subclass: #PgFormattedStatementIntegrationTest
+PgTestCaseBase subclass: #PgFormattedStatementIntegrationTest
 	instanceVariableNames: 'client'
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -111,13 +111,23 @@ PgFormattedStatementIntegrationTest class
 	instanceVariableNames: ''!
 
 !classDefinition: #PgPreparedStatementIntegrationTest category: 'PostgresAdapter-Tests'!
-PgIntegrationTestBase subclass: #PgPreparedStatementIntegrationTest
+PgTestCaseBase subclass: #PgPreparedStatementIntegrationTest
 	instanceVariableNames: 'client'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter-Tests'!
 !classDefinition: 'PgPreparedStatementIntegrationTest class' category: 'PostgresAdapter-Tests'!
 PgPreparedStatementIntegrationTest class
+	instanceVariableNames: ''!
+
+!classDefinition: #PgTimestampReaderTest category: 'PostgresAdapter-Tests'!
+PgTestCaseBase subclass: #PgTimestampReaderTest
+	instanceVariableNames: 'usedClass'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PostgresAdapter-Tests'!
+!classDefinition: 'PgTimestampReaderTest class' category: 'PostgresAdapter-Tests'!
+PgTimestampReaderTest class
 	instanceVariableNames: ''!
 
 !classDefinition: #PgIntegrationTestAdapter category: 'PostgresAdapter-Tests'!
@@ -202,7 +212,7 @@ PgClient class
 
 !classDefinition: #PgConnectionPool category: 'PostgresAdapter'!
 PgObject subclass: #PgConnectionPool
-	instanceVariableNames: 'url configurator pool access'
+	instanceVariableNames: 'configurator pool access settings'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
@@ -268,6 +278,16 @@ PgObject subclass: #PgSqlConverter
 	category: 'PostgresAdapter'!
 !classDefinition: 'PgSqlConverter class' category: 'PostgresAdapter'!
 PgSqlConverter class
+	instanceVariableNames: ''!
+
+!classDefinition: #PgTimestampReader category: 'PostgresAdapter'!
+PgObject subclass: #PgTimestampReader
+	instanceVariableNames: 'readStream'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PostgresAdapter'!
+!classDefinition: 'PgTimestampReader class' category: 'PostgresAdapter'!
+PgTimestampReader class
 	instanceVariableNames: ''!
 
 !classDefinition: #PgSystemAdapter category: 'PostgresAdapter'!
@@ -1166,7 +1186,7 @@ testSpecial
 			on: '{{one,two},{"\"","\\"},{NULL,""},{"NULL",1}' readStream;
 			next) ! !
 
-!PgIntegrationTestBase methodsFor: 'as yet unclassified' stamp: 'jpb 1/9/2021 12:11:54'!
+!PgTestCaseBase methodsFor: 'as yet unclassified' stamp: 'jpb 1/9/2021 12:11:54'!
 systemAdapter
 	^PgSystemAdapter current! !
 
@@ -1227,6 +1247,20 @@ isServerVersionAtLeastMajor: major minor: minor
 	^ serverVersion first > major
 		or:
 			[ serverVersion first = major and: [ serverVersion second >= minor ] ]! !
+
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/10/2021 10:09:01'!
+createTimezoneTestFixture
+	| originalTimezone |
+	client execute: 'DROP TABLE IF EXISTS table1'.
+	client execute: 'CREATE TABLE table1 (
+	  id SERIAL PRIMARY KEY,
+	  name TEXT,
+	  t1 TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	  t2 TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+	)'.
+	
+	originalTimezone _ client converter findTimezoneName.
+	client execute: ('INSERT INTO table1 (name) VALUES (''{1}'')' format: { originalTimezone }).! !
 
 !PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/9/2021 11:28:53'!
 newUUID
@@ -1663,7 +1697,7 @@ testStringEscaping
 	self assert: result firstRecord equals: { 1. string }.
 	client execute: 'DROP TABLE table1'! !
 
-!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/9/2021 22:19:55'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/10/2021 12:32:55'!
 testTimeConversion
 	| result offset formattedOffset |
 	"TIME WITHOUT TIME ZONE maps 1 on 1"
@@ -1683,22 +1717,23 @@ testTimeConversion
 	self assert: 1 equals: result firstFieldOfFirstRecord hour.
 	self assert: 2 equals: result firstFieldOfFirstRecord minute.
 	self assert: 3 equals: result firstFieldOfFirstRecord second.
-	self assert: 0 equals: result firstFieldOfFirstRecord utcOffset.
+	self assert: 0 hours equals: result firstFieldOfFirstRecord offset.
 	self assert: PgTimeWithTimezone  equals: result firstFieldOfFirstRecord class.
 	
 	"TIME WITH TIME ZONE is shifted when the time zone differs"
-	result _ client query: 'SELECT TIMETZ ''01:02:03+00:00'''.
+	result _ client query: 'SELECT TIMETZ ''01:02:03+03:00'''.
 	self assert: 1 equals: result firstFieldOfFirstRecord hour.
 	self assert: 2 equals: result firstFieldOfFirstRecord minute.
 	self assert: 3 equals: result firstFieldOfFirstRecord second.
-	self assert: 0 equals: result firstFieldOfFirstRecord utcOffset.
+	self assert: 3 hours equals: result firstFieldOfFirstRecord offset.
 	self assert: PgTimeWithTimezone  equals: result firstFieldOfFirstRecord class.
 ! !
 
-!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/9/2021 11:57:11'!
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/10/2021 09:41:10'!
 testTimeout
 	"Reconnect with an explicit timeout"
 	client close.
+	
 	"client url: Url."
 	client timeout: 1. "second"
 	self assert: client isWorking.
@@ -1711,19 +1746,12 @@ testTimeout
 		should: [ client execute: 'SELECT pg_sleep(1.5)' ]
 		raise: PgConnectionTimeout! !
 
-!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/9/2021 22:33:50'!
-testTimezone
-	| result originalTimezone |
-	client execute: 'DROP TABLE IF EXISTS table1'.
-	client execute: 'CREATE TABLE table1 (id SERIAL PRIMARY KEY, name TEXT, t1 TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP, t2 TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP)'.
-	originalTimezone _ client converter findTimezoneName.
-	client execute: ('INSERT INTO table1 (name) VALUES (''{1}'')' format: { originalTimezone }).
-	result _ client query: 'SELECT id, name, t1, t2 FROM table1 WHERE id = 1'.
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/10/2021 10:13:35'!
+testTimezoneLoadingConversionFromDatabase
+	| result originalTimezone now |
+	self createTimezoneTestFixture.
 	
-	self assert: result firstRecord first equals: 1.
-	self assert: result firstRecord second equals: client converter findTimezoneName.
-	self assert: (DateAndTime now - result firstRecord third) abs < 30 seconds.
-	"self assert: (DateAndTime now - result firstRecord fourth) abs < 30 seconds. "
+	originalTimezone _ client converter findTimezoneName.
 	
 	client execute: 'SET TIMEZONE TO ''GMT'''.
 	result _ client query: 'SHOW TIMEZONE'.
@@ -1733,20 +1761,38 @@ testTimezone
 	
 	client execute: ('INSERT INTO table1 (name) VALUES (''{1}'')' format: { client converter findTimezoneName }).
 	result _ client query: 'SELECT id, name, t1, t2 FROM table1 WHERE id = 1'.
+	now _ DateAndTime now.
+	
 	self assert: result firstRecord first equals: 1.
 	
 	"t1 is now off, since postgres did not adjust it"
-	"self assert: (DateAndTime now asUTC - result firstRecord fourth) abs < 30 seconds."
+	self assert: (now asUTC - result firstRecord fourth) abs < 30 seconds.
 	
 	result _ client query: 'SELECT id, name, t1, t2 FROM table1 WHERE id = 2'.
+	now _ DateAndTime now.
+	
 	self assert: result firstRecord first equals: 2.
 	self assert: result firstRecord second equals: client converter findTimezoneName.
-	"self assert: (DateAndTime now asUTC - result firstRecord third) abs < 30 seconds."
-	"self assert: (DateAndTime now asUTC - result firstRecord fourth) abs < 30 seconds."
+	self assert: (now asUTC - result firstRecord third) abs < 30 seconds.
+	self assert: (now asUTC - result firstRecord fourth) abs < 30 seconds.
 	
 	client execute: ('SET TIMEZONE TO ''{1}''' format: { originalTimezone }).
 	client converter timezone: (self systemAdapter findTimezoneByName: originalTimezone).
 	client execute: 'DROP TABLE table1'! !
+
+!PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/10/2021 10:10:52'!
+testTimezoneLoadingFromDatabase1
+	| result now |
+	self createTimezoneTestFixture.	
+	
+	result _ client query: 'SELECT id, name, t1, t2 FROM table1 WHERE id = 1'.
+	now _ DateAndTime now.
+	
+	self assert: result firstRecord first equals: 1.
+	self assert: result firstRecord second equals: client converter findTimezoneName.
+	self assert: (now - result firstRecord third) abs < 30 seconds.	
+	self assert: (now - result firstRecord fourth) abs < 30 seconds.
+	! !
 
 !PgClientIntegrationTest methodsFor: 'tests' stamp: 'jpb 1/6/2021 11:37:55'!
 testUuid
@@ -1810,11 +1856,10 @@ testWarmUp
 	pool close.
 	self assert: pool size equals: 0! !
 
-!PgConnectionPoolIntegrationTest methodsFor: 'running' stamp: 'jpb 1/6/2021 17:06:01'!
+!PgConnectionPoolIntegrationTest methodsFor: 'running' stamp: 'jpb 1/10/2021 12:53:32'!
 setUp
 	super setUp.
-	pool _ PgConnectionPool new.
-	pool url: PgClientIntegrationTest url! !
+	pool _ PgConnectionPool newFrom: PgIntegrationTestAdapter findIntegrationConfig.! !
 
 !PgConnectionPoolIntegrationTest methodsFor: 'running'!
 tearDown
@@ -1828,11 +1873,10 @@ isServerVersionAtLeastMajor: major minor: minor
 		or:
 			[ serverVersion first = major and: [ serverVersion second >= minor ] ]! !
 
-!PgFormattedStatementIntegrationTest methodsFor: 'running' stamp: 'jpb 1/6/2021 17:06:01'!
+!PgFormattedStatementIntegrationTest methodsFor: 'running' stamp: 'jpb 1/10/2021 12:52:44'!
 setUp
 	super setUp.
-	client _ PgClient new.
-	client url: PgClientIntegrationTest url.
+	client _ PgClient newFrom: PgIntegrationTestAdapter findIntegrationConfig.
 	client connect! !
 
 !PgFormattedStatementIntegrationTest methodsFor: 'running'!
@@ -2410,18 +2454,180 @@ testSimpleInsertStatement
 	result _ client query: 'SELECT id, name, enabled FROM table1 ORDER BY id'.
 	self assert: result records size equals: 4.! !
 
-!PgPreparedStatementIntegrationTest methodsFor: 'running' stamp: 'jpb 1/6/2021 17:06:01'!
+!PgPreparedStatementIntegrationTest methodsFor: 'running' stamp: 'jpb 1/10/2021 13:02:55'!
 setUp
 	super setUp.
-	client _ PgClient new.
-	client url: PgClientIntegrationTest url.
-	client timeout: 10. "second"
+	client _ PgClient newFrom: 	PgIntegrationTestAdapter findIntegrationConfig.
 	client connect! !
 
 !PgPreparedStatementIntegrationTest methodsFor: 'running'!
 tearDown
 	client close.
 	super tearDown! !
+
+!PgTimestampReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 10:51:14'!
+setUp
+	usedClass _ PgTimestampReader ! !
+
+!PgTimestampReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:29:42'!
+testReadingTimeWithTimezone1
+ 	| reader timestamp |
+	reader _ usedClass on: '11:01:30.842503+01' readStream.
+	timestamp _ reader nextTimeWithTimezone.
+	
+	self assert: 11 equals: timestamp hour.
+	self assert: 1 equals: timestamp minute.
+	self assert: 30.842503 equals: timestamp second.
+	self assert: 1 hours equals: timestamp offset.! !
+
+!PgTimestampReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:31:39'!
+testReadingTimeWithTimezone2
+ 	| reader timestamp |
+	reader _ usedClass on: '11:01:30.842503+01:00' readStream.
+	timestamp _ reader nextTimeWithTimezone.
+	
+	self assert: 11 equals: timestamp hour.
+	self assert: 1 equals: timestamp minute.
+	self assert: 30.842503 equals: timestamp second.
+	self assert: 1 hours equals: timestamp offset.! !
+
+!PgTimestampReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:17:18'!
+testReadingTimeWithTimezone3
+ 	| reader timestamp |
+	reader _ usedClass on: '11:01:30.842503+01:30' readStream.
+	timestamp _ reader nextTimeWithTimezone.
+	
+	self assert: 11 equals: timestamp hour.
+	self assert: 1 equals: timestamp minute.
+	self assert: 30.842503 equals: timestamp second.
+	self assert: (1 hours + 30 minutes) equals: timestamp offset.! !
+
+!PgTimestampReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 11:07:51'!
+testReadingTimeWithTimezone4
+ 	| reader timestamp |
+	reader _ usedClass on: '23:59:59+01' readStream.
+	timestamp _ reader nextTimeWithTimezone.
+	
+	self assert: 23 equals: timestamp hour.
+	self assert: 59 equals: timestamp minute.
+	self assert: 59 equals: timestamp second.
+	self assert: 1 hours  equals: timestamp offset.! !
+
+!PgTimestampReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 11:08:06'!
+testReadingTimeWithTimezone5
+ 	| reader timestamp |
+	reader _ usedClass on: '23:59:59' readStream.
+	timestamp _ reader nextTimeWithTimezone.
+	
+	self assert: 23 equals: timestamp hour.
+	self assert: 59 equals: timestamp minute.
+	self assert: 59 equals: timestamp second.
+	self assert: 0 hours  equals: timestamp offset.! !
+
+!PgTimestampReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 11:59:33'!
+testReadingTimestampsWithTimezone1
+ 	| reader timestamp |
+	reader _ usedClass on: '2021-01-10 10:05:26.133355+01:00' readStream.
+	timestamp _ reader nextTimestampWithTimezone.
+	
+	self assert: 2021 equals: timestamp year yearNumber.
+	self assert: 1 equals: timestamp month monthIndex.
+	self assert: 10 equals: timestamp dayOfMonth.
+	
+	self assert: 10 equals: timestamp hour.
+	self assert: 5 equals: timestamp minute.
+	self assert: 26 equals: timestamp second.
+	self assert: 1 hours equals: timestamp offset.! !
+
+!PgTimestampReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:15:49'!
+testReadingTimestampsWithTimezone2
+ 	| reader timestamp |
+	reader _ usedClass on: '2021-01-10 10:05:26.133355+01' readStream.
+	timestamp _ reader nextTimestampWithTimezone.
+	
+	self assert: 2021 equals: timestamp year yearNumber.
+	self assert: 1 equals: timestamp month monthIndex.
+	self assert: 10 equals: timestamp dayOfMonth.
+	
+	self assert: 10 equals: timestamp hour.
+	self assert: 5 equals: timestamp minute.
+	self assert: 26 equals: timestamp second.
+	self assert: 1 hours equals: timestamp offset.! !
+
+!PgTimestampReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:16:08'!
+testReadingTimestampsWithTimezone3
+ 	| reader timestamp |
+	reader _ usedClass on: '2021-01-10 10:05:26.133355-01' readStream.
+	timestamp _ reader nextTimestampWithTimezone.
+	
+	self assert: 2021 equals: timestamp year yearNumber.
+	self assert: 1 equals: timestamp month monthIndex.
+	self assert: 10 equals: timestamp dayOfMonth.
+	
+	self assert: 10 equals: timestamp hour.
+	self assert: 5 equals: timestamp minute.
+	self assert: 26 equals: timestamp second.
+	self assert: (1 hours * -1) equals: timestamp offset.! !
+
+!PgTimestampReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:16:17'!
+testReadingTimestampsWithTimezone4
+ 	| reader timestamp |
+	reader _ usedClass on: '2021-01-10 10:05:26.133355-08' readStream.
+	timestamp _ reader nextTimestampWithTimezone.
+	
+	self assert: 2021 equals: timestamp year yearNumber.
+	self assert: 1 equals: timestamp month monthIndex.
+	self assert: 10 equals: timestamp dayOfMonth.
+	
+	self assert: 10 equals: timestamp hour.
+	self assert: 5 equals: timestamp minute.
+	self assert: 26 equals: timestamp second.
+	self assert: (8 hours * -1) equals: timestamp offset.! !
+
+!PgTimestampReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:16:25'!
+testReadingTimestampsWithTimezone5
+ 	| reader timestamp |
+	reader _ usedClass on: '2021-02-12 10:05:26.133355+08:30' readStream.
+	timestamp _ reader nextTimestampWithTimezone.
+	
+	self assert: 2021 equals: timestamp year yearNumber.
+	self assert: 2 equals: timestamp month monthIndex.
+	self assert: 12 equals: timestamp dayOfMonth.
+	
+	self assert: 10 equals: timestamp hour.
+	self assert: 5 equals: timestamp minute.
+	self assert: 26 equals: timestamp second.
+	self assert: (8 hours + 30 minutes) equals: timestamp offset.! !
+
+!PgTimestampReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:16:33'!
+testReadingTimestampsWithTimezone6
+ 	| reader timestamp |
+	reader _ usedClass on: '2001-12-23 14:39:53.662522-05' readStream.
+	timestamp _ reader nextTimestampWithTimezone.
+	
+	self assert: 2001 equals: timestamp year yearNumber.
+	self assert: 12 equals: timestamp month monthIndex.
+	self assert: 23 equals: timestamp dayOfMonth.
+	
+	self assert: 14 equals: timestamp hour.
+	self assert: 39 equals: timestamp minute.
+	self assert: 53 equals: timestamp second.
+	self assert: -5 hours equals: timestamp offset.! !
+
+!PgTimestampReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:31:08'!
+testReadingTimestampsWithoutTimezone1
+ 	| reader timestamp |
+	reader _ usedClass on: '2021-01-10 10:05:26.133355' readStream.
+	timestamp _ reader nextTimestampWithoutTimezone.
+	
+	self assert: 2021 equals: timestamp year yearNumber.
+	self assert: 1 equals: timestamp month monthIndex.
+	self assert: 10 equals: timestamp dayOfMonth.
+	
+	self assert: 10 equals: timestamp hour.
+	self assert: 5 equals: timestamp minute.
+	self assert: 26 equals: timestamp second.
+	self assert: 0 hours equals: timestamp offset.! !
 
 !PgIntegrationTestAdapter class methodsFor: 'configuration' stamp: 'jpb 1/9/2021 10:16:44'!
 findIntegrationConfig
@@ -3662,7 +3868,7 @@ warmUp
 	
 	self warmUp: self capacity! !
 
-!PgConnectionPool methodsFor: 'public'!
+!PgConnectionPool methodsFor: 'public' stamp: 'jpb 1/10/2021 13:00:48'!
 warmUp: numberOfConnections
 	"Warm up the pool to numberOfConnections.
 	Effectively creating that many connections at once"
@@ -3671,9 +3877,10 @@ warmUp: numberOfConnections
 	connections _ Array streamContents: [ :out |
 		numberOfConnections timesRepeat: [ 
 			out nextPut: self acquireConnection ] ].
+	
 	connections do: [ :each | self releaseConnection: each ]! !
 
-!PgConnectionPool methodsFor: 'public'!
+!PgConnectionPool methodsFor: 'public' stamp: 'jpb 1/10/2021 13:00:57'!
 withConnection: oneArgumentBlock
 	"Execute oneArgumentBlock with a connection (P3Client) as argument,
 	acquiring it from the pool and releasing it to the pool when done,
@@ -3682,10 +3889,12 @@ withConnection: oneArgumentBlock
 	| connection result error |
 	connection _ self acquireConnection.
 	error _ result _ nil.
+	
 	[ [ result _ oneArgumentBlock value: connection ] 
 			on: Error 
 			do: [ :exception | error _ exception. error pass ] ] 
 		ensure: [ error ifNil: [ self releaseConnection: connection ] ].
+		
 	^ result! !
 
 !PgConnectionPool methodsFor: 'accessing'!
@@ -3695,10 +3904,6 @@ capacity
 !PgConnectionPool methodsFor: 'accessing'!
 size
 	^ pool size! !
-
-!PgConnectionPool methodsFor: 'accessing'!
-url
-	^ url! !
 
 !PgConnectionPool methodsFor: 'initialization'!
 close
@@ -3728,22 +3933,25 @@ size: capacity
 	
 	pool _ OrderedCollection new: capacity! !
 
-!PgConnectionPool methodsFor: 'initialization'!
-url: aPsqlUrl
-	"Set the P3Client url"
-	
-	url _ aPsqlUrl ! !
-
-!PgConnectionPool methodsFor: 'private' stamp: 'jpb 1/6/2021 10:37:17'!
+!PgConnectionPool methodsFor: 'private' stamp: 'jpb 1/10/2021 12:56:10'!
 makeP3Client
 	| p3Client |
-	p3Client _ PgClient url: url.
+	p3Client _ PgClient newFrom: settings.
 	configurator ifNotNil: [ configurator value: p3Client ].
 	^ p3Client! !
 
-!PgConnectionPool class methodsFor: 'instance creation'!
-url: anUrl
-	^ self new url: anUrl! !
+!PgConnectionPool methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:57:16'!
+settings: newSettings
+	settings _ newSettings! !
+
+!PgConnectionPool class methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:56:58'!
+newFrom: newSettings
+	| newPool |
+	
+	newPool _ self new.
+	newPool settings: newSettings.
+	
+	^newPool! !
 
 !PgConverter methodsFor: 'converting-geometric' stamp: 'jpb 1/6/2021 10:36:32'!
 convertBoxFrom: bytes length: length description: description
@@ -3876,17 +4084,21 @@ convertUuidFrom: bytes length: length description: description
 	^PgSystemAdapter current
 		readUUIDFrom: (self asciiStreamFor: bytes length: length)! !
 
-!PgConverter methodsFor: 'converting-chronology'!
+!PgConverter methodsFor: 'converting-chronology' stamp: 'jpb 1/10/2021 12:38:37'!
 convertDateAndTimeFrom: bytes length: length description: description
 	"TIMESTAMP WITH TIME ZONE (TIMESTAMPTZ) is stored internally in Postgres as UTC, but represented in the timezone of the connection, with a correct offset added. In other words, Postgres does the necessary shifting, we just have to read the result"
+	| newReader |
+	newReader _ PgTimestampReader on: (self asciiStreamFor: bytes length: length).
 	
-	^ DateAndTime readFrom: (self asciiStreamFor: bytes length: length)! !
+	^newReader nextTimestampWithTimezone! !
 
-!PgConverter methodsFor: 'converting-chronology' stamp: 'jpb 1/9/2021 20:39:55'!
+!PgConverter methodsFor: 'converting-chronology' stamp: 'jpb 1/10/2021 12:37:56'!
 convertDateAndTimeWithoutTimezoneFrom: bytes length: length description: description
 	"TIMESTAMP WITHOUT TIME ZONE (TIMESTAMP) is stored internally in Postgres the way it was inserted, its representation remains constant, with no offset added. As this type is normally used to represent UTC timestamps and generally times not bound to any particular timezone it's NOT converted as doing that would undermine the reason for this datatype. According to PostgreSQL the type for such behaviour is timestampz which actually doesn't save the timezone too, but returns it rendered to the connection timezone"
-	^self systemAdapter
-		readDateAndTimeWithoutTimezoneFrom: (self asciiStreamFor: bytes length: length) ! !
+	| newReader |
+	newReader _ PgTimestampReader on: (self asciiStreamFor: bytes length: length).
+	
+	^newReader nextTimestampWithoutTimezone.! !
 
 !PgConverter methodsFor: 'converting-chronology'!
 convertDateFrom: bytes length: length description: description
@@ -4585,6 +4797,264 @@ newExpansion
 !PgSqlConverter methodsFor: 'as yet unclassified' stamp: 'jpb 1/9/2021 13:24:31'!
 startReading
 	argumentIdx _ 1.! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 10:59:03'!
+atEnd
+	^readStream atEnd! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 11:45:46'!
+consumeWhitespace
+	"Reads all the whitespace until the next character is not whitespace"
+	[ self peekChar asciiValue < 33 ]
+		whileTrue: [ self next ]! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 10:56:06'!
+initialize
+	readStream _ nil! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:25:11'!
+isNextOffsetMinutes
+	| peekedChar asciiValue |
+	peekedChar _ self peekChar.
+	
+	$: = peekedChar ifTrue: [ self next].
+	
+	peekedChar _ self peekChar.
+		
+	peekedChar isNil ifTrue: [ ^false ].
+	
+	asciiValue _ peekedChar asciiValue.
+	
+	^(asciiValue >= 48) & (asciiValue < 58).! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 10:58:54'!
+next
+	^readStream next! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 11:33:55'!
+nextDigit
+	| newChar newDigit |
+	self atEnd ifTrue: [ self error: 'Expected digit, found eof' ].
+	
+	newChar _ self next.
+	
+	newDigit _ newChar asciiValue - 48.
+	self assert: newDigit >= 0.
+	self assert: newDigit < 10.
+	
+	^newDigit! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:30:40'!
+nextIsDigit
+	| asciiValue peekedChar |
+	
+	peekedChar _ self peekChar.
+	peekedChar isNil ifTrue: [ ^ false ].
+	asciiValue _ peekedChar asciiValue.
+	
+	^(asciiValue >= 48) & (asciiValue < 58)! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:34:23'!
+nextTimeWithTimezone
+	| hours minutes seconds utcOffset |
+	hours _ self readHours.
+	minutes _ self readMinutes.
+	seconds _ self readSeconds.
+	utcOffset _ self readUtcOffset.
+	
+	^PgTimeWithTimezone
+		hour: hours
+		minute: minutes
+		second: seconds abs
+		offset: utcOffset ! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 11:25:59'!
+nextTimestampWithTimezone
+	| years months daysOfMonths hours minutes seconds utcOffset |
+	years _ self readYears.
+	months _ self readMonths.
+	daysOfMonths _ self readDaysOfMonth.
+	hours _ self readHours.
+	minutes _ self readMinutes.
+	seconds _ self readSeconds.
+	utcOffset _ self readUtcOffset.
+	
+	^DateAndTime
+		year: years
+		month: months
+		day: daysOfMonths
+		hour: hours
+		minute: minutes
+		second: seconds
+		offset: utcOffset.! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 11:24:39'!
+nextTimestampWithoutTimezone
+	| years months daysOfMonths hours minutes seconds |
+	years _ self readYears.
+	months _ self readMonths.
+	daysOfMonths _ self readDaysOfMonth.
+	hours _ self readHours.
+	minutes _ self readMinutes.
+	seconds _ self readSeconds.
+	
+	^DateAndTime
+		year: years
+		month: months
+		day: daysOfMonths
+		hour: hours
+		minute: minutes
+		second: seconds
+		offset: 0 hours.! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 11:34:55'!
+peekChar
+	^readStream peek! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 11:38:56'!
+readDaysOfMonth
+	| newDays |
+	
+	"Consume leading -"
+	$- = self peekChar ifTrue: [ self next ].
+	self atEnd ifTrue: [ self error: 'Expected days found eof' ].
+	
+	newDays _ self nextDigit.
+	newDays _ (newDays * 10) + self nextDigit.
+	
+	self assert: newDays > 0.
+	self assert: newDays < 32.
+	
+	^newDays! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 11:43:27'!
+readHours
+	| newHour |
+	self consumeWhitespace.
+	
+	newHour _ self nextDigit.
+	newHour _ newHour * 10.
+	newHour _ newHour + self nextDigit.
+	
+	self assert: newHour >= 0.
+	self assert: newHour < 24.
+	self assert: $: = self next.
+	
+	^newHour! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 10:59:31'!
+readMinutes
+	| newMinute |
+	newMinute _ self next asciiValue - 48.
+	newMinute _ newMinute * 10.
+	newMinute _ newMinute + (self next asciiValue - 48).
+	
+	self assert: newMinute >= 0.
+	self assert: newMinute < 60.
+	self assert: $: = self next.
+	
+	^newMinute! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 11:37:22'!
+readMonths
+	| newMonths |
+	
+	"Consume leading -"
+	$- = self peekChar ifTrue: [ self next ].
+	self atEnd ifTrue: [ self error: 'Expected months found eof' ].
+	
+	newMonths _ self nextDigit.
+	newMonths _ (newMonths * 10) + self nextDigit.
+	
+	self assert: newMonths > 0.
+	self assert: newMonths < 13.
+	
+	^newMonths! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:15:27'!
+readSeconds
+	| newSeconds newFraction |
+	newFraction _ 0.
+	newSeconds _ self nextDigit.
+	newSeconds _ newSeconds * 10.
+	newSeconds _ newSeconds + self nextDigit.
+	
+	self assert: newSeconds >= 0.
+	self assert: newSeconds < 60.
+	
+	$. = self peekChar
+		ifTrue: [
+			| digitBuffer | 
+			self next. 
+			digitBuffer _ '' writeStream.
+			
+			[ self nextIsDigit ] 
+				whileTrue: [  digitBuffer nextPut: self next ].
+				
+			digitBuffer _ digitBuffer contents reverse readStream.
+			[ digitBuffer atEnd ]
+				whileFalse: [newFraction 		_ (newFraction / 10.0) + (digitBuffer next asciiValue - 48)] ].
+			
+	newFraction > 0
+		ifTrue: [ newSeconds _ newSeconds + (newFraction / 10) ]. 
+	
+	^newSeconds! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:29:16'!
+readUtcOffset
+	| value offsetSign |
+	self atEnd
+		ifTrue: [ ^0 hours ].
+	
+	offsetSign _ self next.
+	self assert: ('-+' includes: offsetSign).
+	
+	value _ self nextDigit.
+	value _ value * 10.
+	value _ value + self nextDigit.
+	
+	self assert: value >= 0.
+	self assert: value < 23.
+	
+	value _ value hours.
+	
+	self isNextOffsetMinutes
+		ifTrue: [ |newMins|
+			newMins _ self nextDigit.
+			newMins _ (newMins * 10) + self nextDigit.
+			
+			self assert: newMins >= 0.
+			self assert: newMins < 60.
+	
+			value _ value + newMins minutes
+		].
+	
+	$- = offsetSign ifTrue: [ ^value * -1 ].
+	
+	^value! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 11:39:37'!
+readYears
+	| newYear |
+	newYear _ self nextDigit.
+	newYear _ (newYear * 10) + self nextDigit.
+	newYear _ (newYear * 10) + self nextDigit.
+	newYear _ (newYear * 10) + self nextDigit.
+	
+	^newYear! !
+
+!PgTimestampReader methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 10:56:16'!
+setStream: newStream
+	readStream _ newStream! !
+
+!PgTimestampReader class methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 10:55:25'!
+on: newStream
+	| newReader |
+	newReader _ self new.
+	
+	newReader setStream: newStream.
+	
+	^newReader! !
 
 !PgSystemAdapter methodsFor: 'as yet unclassified' stamp: 'jpb 1/6/2021 11:27:35'!
 convertJsonFrom: bytes length: length description: description
@@ -5581,6 +6051,15 @@ minute: aSmallInteger
 	
 	^aSmallInteger ! !
 
+!PgTimeWithTimezone methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 11:04:50'!
+offset
+	"Returns the UTC offset"
+	^utcOffset ! !
+
+!PgTimeWithTimezone methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:34:06'!
+offset: aSmallInteger 
+	utcOffset _ aSmallInteger! !
+
 !PgTimeWithTimezone methodsFor: 'as yet unclassified' stamp: 'jpb 1/9/2021 22:18:15'!
 second
 	^seconds ! !
@@ -5591,101 +6070,24 @@ second: aSmallInteger
 	
 	^aSmallInteger ! !
 
-!PgTimeWithTimezone methodsFor: 'as yet unclassified' stamp: 'jpb 1/9/2021 22:20:09'!
-utcOffset
-	^utcOffset! !
-
-!PgTimeWithTimezone methodsFor: 'as yet unclassified' stamp: 'jpb 1/9/2021 22:03:41'!
-utcOffset: aSmallInteger 
-	utcOffset _ aSmallInteger! !
-
-!PgTimeWithTimezone class methodsFor: 'as yet unclassified' stamp: 'jpb 1/9/2021 22:00:34'!
-hour: aSmallInteger minute: aSmallInteger2 second: aSmallInteger3 utcOffset: aSmallInteger4 
+!PgTimeWithTimezone class methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 12:33:54'!
+hour: aSmallInteger minute: aSmallInteger2 second: aSmallInteger3 offset: aDuration 
 	| newTime |
 	newTime _ self new.
 	
 	newTime hour: aSmallInteger.
 	newTime minute: aSmallInteger2.
 	newTime second: aSmallInteger3.
-	newTime utcOffset: aSmallInteger4.
+	newTime offset: aDuration.
 	
 	^newTime! !
 
-!PgTimeWithTimezone class methodsFor: 'as yet unclassified' stamp: 'jpb 1/9/2021 21:33:52'!
+!PgTimeWithTimezone class methodsFor: 'as yet unclassified' stamp: 'jpb 1/10/2021 10:54:34'!
 readFrom: aStream
-	^self
-		hour: (self readHoursFrom: aStream)
-		minute: (self readMinutesFrom: aStream)
-		second: (self readSecondsFrom: aStream)
-		utcOffset: (self readUtcOffsetFrom: aStream)! !
-
-!PgTimeWithTimezone class methodsFor: 'as yet unclassified' stamp: 'jpb 1/9/2021 21:39:32'!
-readHoursFrom: aReadStream 
-	| newHour |
-	newHour _ aReadStream next asciiValue - 48.
-	newHour _ newHour * 10.
-	newHour _ newHour + (aReadStream next asciiValue - 48).
+	| reader |
+	reader _ PgTimestampReader on: aStream.
 	
-	self assert: newHour >= 0.
-	self assert: newHour < 23.
-	self assert: $: = aReadStream next.
-	
-	^newHour! !
-
-!PgTimeWithTimezone class methodsFor: 'as yet unclassified' stamp: 'jpb 1/9/2021 21:42:07'!
-readMinutesFrom: aReadStream 
-	| newMinute |
-	newMinute _ aReadStream next asciiValue - 48.
-	newMinute _ newMinute * 10.
-	newMinute _ newMinute + (aReadStream next asciiValue - 48).
-	
-	self assert: newMinute >= 0.
-	self assert: newMinute < 60.
-	self assert: $: = aReadStream next.
-	
-	^newMinute! !
-
-!PgTimeWithTimezone class methodsFor: 'as yet unclassified' stamp: 'jpb 1/9/2021 21:45:06'!
-readSecondsFrom: aReadStream 
-	| newSeconds |
-	newSeconds _ aReadStream next asciiValue - 48.
-	newSeconds _ newSeconds * 10.
-	newSeconds _ newSeconds + (aReadStream next asciiValue - 48).
-	
-	self assert: newSeconds >= 0.
-	self assert: newSeconds < 60.
-	self assert: ('-+' includes: aReadStream peek).
-	
-	^newSeconds! !
-
-!PgTimeWithTimezone class methodsFor: 'as yet unclassified' stamp: 'jpb 1/9/2021 21:58:25'!
-readUtcOffsetFrom: aReadStream 
-	| value offsetSign peekedChar |
-	offsetSign _ aReadStream next.
-	self assert: ('-+' includes: offsetSign).
-	
-	value _ aReadStream next asciiValue - 48.
-	value _ value * 10.
-	value _ value + (aReadStream next asciiValue - 48).
-	
-	self assert: value >= 0.
-	self assert: value < 23.
-	
-	peekedChar _ aReadStream peek.
-	
-	(peekedChar isNil not and: [ peekedChar isDigit ])
-		ifTrue: [ |newMins|
-			newMins _ aReadStream next asciiValue - 48.
-			newMins _ newMins + (aReadStream next asciiValue - 48).
-			
-			self assert: newMins >= 0.
-			self assert: newMins < 60.
-			value _ (value * 100) + newMins.
-		].
-	
-	$- = offsetSign ifTrue: [ ^value * -1 ].
-	
-	^value! !
+	^reader nextTimeWithTimezone! !
 
 !PgValuesArray methodsFor: 'testing'!
 isEmpty
