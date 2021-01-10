@@ -18,3 +18,4 @@ MIT License
 # Authors
 
 - Josef Philip Bernhart (jpb)
+- Sven Van Caekenberghe (Author of P3 for Pharo Smalltalk)
