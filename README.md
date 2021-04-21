@@ -26,7 +26,7 @@ settings at: #password put: ''.
 client _ PgClient newFrom: settings.
 client connect.
 
-client query: 'select tablename from pg_tables'.
+client executeQuery: 'select tablename from pg_tables'.
 
 ```
 
