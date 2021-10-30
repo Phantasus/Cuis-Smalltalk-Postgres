@@ -43,7 +43,8 @@ The last git commit at the time of fetching that project was:
 >    Update README.md
 
 The sha256sum of the files which were copied into the project directory
-of this project (Postgres.pck.st and the README.md of the original project):
+of this project (Postgres.pck.st, the LICENSE and the README.md of the original project):
 
 > 748e2eea828662cad74b22c19e920fe5baae835c22daf266b5090e6448b6790a references/Postgres.pck.st
 > 60f2992ab043ac84cf26a8a3cebb7e6b712dc941c50ff19cf646d6afd5cbc024 references/README_Postgres.md
+> 195c2d2e14342c97adaa84c8aab2e817ccf263f10776b1c778db03ebd6c889f4 references/LICENSE_Postgres.md
