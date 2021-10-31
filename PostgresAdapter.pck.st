@@ -1,15 +1,38 @@
-'From Cuis 5.0 [latest update: #4567] on 21 April 2021 at 2:12:39 pm'!
+'From Cuis 5.0 [latest update: #4928] on 31 October 2021 at 11:38:10 am'!
 'Description Cuis PostgreSQL adapter used for connecting to a PostgreSQL database using protocol V3
 
 License: MIT License
 Author: Josef Philip Bernhart
 P3 Author: Sven Van Caekenberghe'!
-!provides: 'PostgresAdapter' 1 53!
+!provides: 'PostgresAdapter' 1 60!
 !requires: 'Network-Kernel' 1 5 nil!
-SystemOrganization addCategory: 'PostgresAdapter-Tests'!
+!requires: 'Identities-UUID' 1 8 nil!
+!requires: 'JSON' 1 19 nil!
 SystemOrganization addCategory: 'PostgresAdapter'!
+SystemOrganization addCategory: 'PostgresAdapter-Tests'!
 
 
+!classDefinition: #PostgresAdapterPackage category: 'PostgresAdapter'!
+CodePackage subclass: #PostgresAdapterPackage
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PostgresAdapter'!
+!classDefinition: 'PostgresAdapterPackage class' category: 'PostgresAdapter'!
+PostgresAdapterPackage class
+	instanceVariableNames: ''!
+
+
+!PostgresAdapterPackage commentStamp: '<historical>' prior: 0!
+Represents the code package for the postgres adapter package. Here all the install hooks for Cuis are implemented.!
+
+!PostgresAdapterPackage class methodsFor: 'as yet unclassified' stamp: 'jpb 10/31/2021 11:07:52'!
+postPackageInstall
+	"This gets called after installing all the package code.
+	Redefine as appropriate"
+	Transcript log: 'Enabling PgSystemAdapter for Cuis'.
+	PgSystemAdapter selectCuis.! !
+PostgresAdapterPackage prePackageInstall!
 !classDefinition: #PgError category: 'PostgresAdapter'!
 Error subclass: #PgError
 	instanceVariableNames: 'info'
@@ -129,16 +152,6 @@ PgTestCaseBase subclass: #PgTimestampReaderTest
 !classDefinition: 'PgTimestampReaderTest class' category: 'PostgresAdapter-Tests'!
 PgTimestampReaderTest class
 	instanceVariableNames: ''!
-
-!classDefinition: #PgIntegrationTestAdapter category: 'PostgresAdapter-Tests'!
-Object subclass: #PgIntegrationTestAdapter
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'PostgresAdapter-Tests'!
-!classDefinition: 'PgIntegrationTestAdapter class' category: 'PostgresAdapter-Tests'!
-PgIntegrationTestAdapter class
-	instanceVariableNames: 'integrationConfig'!
 
 !classDefinition: #PgArrayValueParser category: 'PostgresAdapter'!
 Object subclass: #PgArrayValueParser
@@ -459,6 +472,16 @@ Object subclass: #PgValuesArray
 !classDefinition: 'PgValuesArray class' category: 'PostgresAdapter'!
 PgValuesArray class
 	instanceVariableNames: ''!
+
+!classDefinition: #PgIntegrationTestAdapter category: 'PostgresAdapter-Tests'!
+Object subclass: #PgIntegrationTestAdapter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PostgresAdapter-Tests'!
+!classDefinition: 'PgIntegrationTestAdapter class' category: 'PostgresAdapter-Tests'!
+PgIntegrationTestAdapter class
+	instanceVariableNames: 'integrationConfig'!
 
 
 !PgError commentStamp: '' prior: 0!
@@ -2653,32 +2676,6 @@ testReadingTimestampsWithoutTimezone1
 	self assert: 26 equals: timestamp second.
 	self assert: 0 hours equals: timestamp offset.! !
 
-!PgIntegrationTestAdapter class methodsFor: 'configuration' stamp: 'jpb 1/9/2021 10:16:44'!
-findIntegrationConfig
-	"Returns configuration for the integration tests"
-	| fields allNil |
-	fields _ #(host port database user password).
-	
-	integrationConfig ifNil: [ integrationConfig _ IdentityDictionary new ].
-
-	allNil _ fields inject: true into: [:acc :field |
-		(integrationConfig
-			at: field 
-			ifAbsent: [nil] ) isNil & acc ].
-		
-	allNil ifTrue: [
-		"For configuring for integration tests set the #host, #port, #database, #user, #password
-		settings to valid values for your local running PostgreSQL database which you are intending
-		to be used for testing purposes. During the integration test tables are created, dropped,
-		changed so don't use a database which you are intending for production use"
-		self error: 'Configure your integration test setup (inspect integrationConfig)'
-	].
-	
-	integrationConfig at: #timeout ifAbsent: [ integrationConfig at: #timeout put: 30 ].
-	
-	
-	^integrationConfig! !
-
 !PgArrayValueParser methodsFor: 'instance creation'!
 converter: block
 	"Set my converter to block, which will parse the text of array elements"
@@ -4027,7 +4024,7 @@ queryAll: argumentsCollection
 
 	^ argumentsCollection collect: [ :each | self executeQuery: each ]! !
 
-!PgFormattedStatement methodsFor: 'private'!
+!PgFormattedStatement methodsFor: 'private' stamp: 'jpb 10/30/2021 11:46:37'!
 bind: arguments
 	"Build and return the actual SQL statement by splicing in the arguments for all placeholders in the template"
 	
@@ -4038,7 +4035,7 @@ bind: arguments
 					ifTrue: [ | index argument |
 						index _ Integer readFrom: readStream.
 						argument _ arguments at: index.
-						argument p3PrintUsing: self on: out ]
+						argument postgresPrintUsing: self on: out ]
 					ifFalse: [ out nextPut: char ] ] ]! !
 
 !PgFormattedStatement methodsFor: 'printing-dispatched'!
@@ -4127,7 +4124,7 @@ printTime: time on: stream
 	time print24: true on: stream.
 	stream nextPut: $'! !
 
-!PgFormattedStatement methodsFor: 'printing-dispatched'!
+!PgFormattedStatement methodsFor: 'printing-dispatched' stamp: 'jpb 10/30/2021 11:46:37'!
 printValuesArray: valuesArray on: stream
 	| first |
 	first _ true.
@@ -4135,7 +4132,7 @@ printValuesArray: valuesArray on: stream
 	stream nextPut: $[.
 	valuesArray do: [ :each |
 		first ifTrue: [ first _ false ] ifFalse: [ stream nextPut: $, ].
-		each p3PrintUsing: self on: stream ].
+		each postgresPrintUsing: self on: stream ].
 	stream nextPut: $]! !
 
 !PgFormattedStatement methodsFor: 'initialization'!
@@ -4235,14 +4232,14 @@ nextPutNullParameter
 
 	byteStream nextPutAll: #[255 255 255 255]! !
 
-!PgMessageBuilder methodsFor: 'writing' stamp: 'jpb 1/11/2021 18:51:31'!
+!PgMessageBuilder methodsFor: 'writing' stamp: 'jpb 10/30/2021 11:46:37'!
 nextPutParameterAsText: aValue description: paramDescription
 
 	| sizePosition endPosition |
 	
 	sizePosition _ byteStream position.
 	byteStream nextPutAll: #[ 0 0 0 0 ]. "placeholder"
-	aValue p3PrintUsing: self on: (PgSystemAdapter current
+	aValue postgresPrintUsing: self on: (PgSystemAdapter current
 		newCharacterWriteStreamOn: byteStream
 		encoding: encoder).
 	endPosition _ byteStream position.
@@ -4347,14 +4344,14 @@ printTime: time on: stream
 	time print24: true on: stream.
 	stream nextPut: $'! !
 
-!PgMessageBuilder methodsFor: 'printing-dispatched'!
+!PgMessageBuilder methodsFor: 'printing-dispatched' stamp: 'jpb 10/30/2021 11:46:37'!
 printValuesArray: valuesArray on: stream
 	| first |
 	first _ true.
 	stream nextPut: ${.
 	valuesArray do: [ :each |
 		first ifTrue: [ first _ false ] ifFalse: [ stream nextPut: $, ].
-		each p3PrintUsing: self on: stream ].
+		each postgresPrintUsing: self on: stream ].
 	stream nextPut: $}! !
 
 !PgMessageBuilder class methodsFor: 'instance creation'!
@@ -5304,8 +5301,8 @@ stringContains: includedString in: inputString
 	"Returns true if the includedString is contained in the inputString"
 	^inputString includesSubString: includedString ! !
 
-!PgBitString methodsFor: 'printing'!
-p3PrintUsing: delegate on: stream
+!PgBitString methodsFor: 'printing' stamp: 'jpb 10/30/2021 11:46:37'!
+postgresPrintUsing: delegate on: stream
 	"Print me on stream via double dispatch on delegate.
 	Check the implementors of #p3PrintOn:using:"
 
@@ -5440,8 +5437,8 @@ bits: integer count: count
 		size: count;
 		yourself! !
 
-!PgGeometricObject methodsFor: 'printing'!
-p3PrintUsing: delegate on: stream
+!PgGeometricObject methodsFor: 'printing' stamp: 'jpb 10/30/2021 11:46:37'!
+postgresPrintUsing: delegate on: stream
 	"Print me on stream via double dispatch on delegate.
 	Check the implementors of #p3PrintOn:using:"
 
@@ -5916,8 +5913,8 @@ readFrom: stream
 	closer = $] ifTrue: [ path beOpen ].
 	^ path! !
 
-!PgInterval methodsFor: 'printing'!
-p3PrintUsing: delegate on: stream
+!PgInterval methodsFor: 'printing' stamp: 'jpb 10/30/2021 11:46:37'!
+postgresPrintUsing: delegate on: stream
 	"Print me on stream via double dispatch on delegate.
 	Check the implementors of #p3PrintOn:using:"
 
@@ -6134,8 +6131,8 @@ readFrom: aStream
 isEmpty
 	^ array isNil or: [ array isEmpty ]! !
 
-!PgValuesArray methodsFor: 'printing'!
-p3PrintUsing: delegate on: stream
+!PgValuesArray methodsFor: 'printing' stamp: 'jpb 10/30/2021 11:46:37'!
+postgresPrintUsing: delegate on: stream
 	"Print me on stream via double dispatch on delegate.
 	Check the implementors of #p3PrintOn:using:"
 
@@ -6163,12 +6160,38 @@ withAll: collection
 		values: collection asArray;
 		yourself! !
 
-!Number methodsFor: '*PostgresAdapter' stamp: 'jpb 1/11/2021 19:34:59'!
-p3PrintUsing: aPgFormattedStatement on: aWriteStream 
+!PgIntegrationTestAdapter class methodsFor: 'configuration' stamp: 'jpb 1/9/2021 10:16:44'!
+findIntegrationConfig
+	"Returns configuration for the integration tests"
+	| fields allNil |
+	fields _ #(host port database user password).
+	
+	integrationConfig ifNil: [ integrationConfig _ IdentityDictionary new ].
+
+	allNil _ fields inject: true into: [:acc :field |
+		(integrationConfig
+			at: field 
+			ifAbsent: [nil] ) isNil & acc ].
+		
+	allNil ifTrue: [
+		"For configuring for integration tests set the #host, #port, #database, #user, #password
+		settings to valid values for your local running PostgreSQL database which you are intending
+		to be used for testing purposes. During the integration test tables are created, dropped,
+		changed so don't use a database which you are intending for production use"
+		self error: 'Configure your integration test setup (inspect integrationConfig)'
+	].
+	
+	integrationConfig at: #timeout ifAbsent: [ integrationConfig at: #timeout put: 30 ].
+	
+	
+	^integrationConfig! !
+
+!Number methodsFor: '*PostgresAdapter' stamp: 'jpb 10/30/2021 11:46:37'!
+postgresPrintUsing: aPgFormattedStatement on: aWriteStream 
 	self printOn: aWriteStream base: 10! !
 
-!ByteArray methodsFor: '*PostgresAdapter' stamp: 'jpb 1/11/2021 19:41:00'!
-p3PrintUsing: aPgFormattedStatement on: aWriteStream 
+!ByteArray methodsFor: '*PostgresAdapter' stamp: 'jpb 10/30/2021 11:46:37'!
+postgresPrintUsing: aPgFormattedStatement on: aWriteStream 
 	aWriteStream nextPutAll: 'E''\\x'.
 	self do: [:bytes | bytes printOn: aWriteStream base: 16 ].
 	aWriteStream nextPut: $'.! !
@@ -6176,3 +6199,4 @@ p3PrintUsing: aPgFormattedStatement on: aWriteStream
 !Dictionary methodsFor: '*PostgresAdapter' stamp: 'jpb 1/9/2021 13:37:57'!
 findPostgreSqlWith: aPgSqlConverter 
 	^aPgSqlConverter convertToEncapsulatedJsonString: self.! !
+PostgresAdapterPackage postPackageInstall!
