@@ -1,24 +1,24 @@
-'From Cuis 5.0 [latest update: #4928] on 31 October 2021 at 11:38:10 am'!
+'From Cuis6.3 [latest update: #6163] on 19 February 2024 at 9:49:31 pm'!
 'Description Cuis PostgreSQL adapter used for connecting to a PostgreSQL database using protocol V3
 
 License: MIT License
 Author: Josef Philip Bernhart
 P3 Author: Sven Van Caekenberghe'!
-!provides: 'PostgresAdapter' 1 60!
+!provides: 'PostgresAdapter' 1 61!
 !requires: 'Network-Kernel' 1 5 nil!
 !requires: 'Identities-UUID' 1 8 nil!
 !requires: 'JSON' 1 19 nil!
-SystemOrganization addCategory: 'PostgresAdapter'!
-SystemOrganization addCategory: 'PostgresAdapter-Tests'!
+SystemOrganization addCategory: #PostgresAdapter!
+SystemOrganization addCategory: #'PostgresAdapter-Tests'!
 
 
-!classDefinition: #PostgresAdapterPackage category: 'PostgresAdapter'!
+!classDefinition: #PostgresAdapterPackage category: #PostgresAdapter!
 CodePackage subclass: #PostgresAdapterPackage
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PostgresAdapterPackage class' category: 'PostgresAdapter'!
+!classDefinition: 'PostgresAdapterPackage class' category: #PostgresAdapter!
 PostgresAdapterPackage class
 	instanceVariableNames: ''!
 
@@ -33,453 +33,453 @@ postPackageInstall
 	Transcript log: 'Enabling PgSystemAdapter for Cuis'.
 	PgSystemAdapter selectCuis.! !
 PostgresAdapterPackage prePackageInstall!
-!classDefinition: #PgError category: 'PostgresAdapter'!
+!classDefinition: #PgError category: #PostgresAdapter!
 Error subclass: #PgError
 	instanceVariableNames: 'info'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgError class' category: 'PostgresAdapter'!
+!classDefinition: 'PgError class' category: #PostgresAdapter!
 PgError class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgBoundsError category: 'PostgresAdapter'!
+!classDefinition: #PgBoundsError category: #PostgresAdapter!
 PgError subclass: #PgBoundsError
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgBoundsError class' category: 'PostgresAdapter'!
+!classDefinition: 'PgBoundsError class' category: #PostgresAdapter!
 PgBoundsError class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgConnectionTimeout category: 'PostgresAdapter'!
+!classDefinition: #PgConnectionTimeout category: #PostgresAdapter!
 PgError subclass: #PgConnectionTimeout
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgConnectionTimeout class' category: 'PostgresAdapter'!
+!classDefinition: 'PgConnectionTimeout class' category: #PostgresAdapter!
 PgConnectionTimeout class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgNotFound category: 'PostgresAdapter'!
+!classDefinition: #PgNotFound category: #PostgresAdapter!
 PgError subclass: #PgNotFound
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgNotFound class' category: 'PostgresAdapter'!
+!classDefinition: 'PgNotFound class' category: #PostgresAdapter!
 PgNotFound class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgNotification category: 'PostgresAdapter'!
+!classDefinition: #PgNotification category: #PostgresAdapter!
 Notification subclass: #PgNotification
 	instanceVariableNames: 'info'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgNotification class' category: 'PostgresAdapter'!
+!classDefinition: 'PgNotification class' category: #PostgresAdapter!
 PgNotification class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgArrayValueParserTest category: 'PostgresAdapter-Tests'!
+!classDefinition: #PgArrayValueParserTest category: #'PostgresAdapter-Tests'!
 TestCase subclass: #PgArrayValueParserTest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter-Tests'!
-!classDefinition: 'PgArrayValueParserTest class' category: 'PostgresAdapter-Tests'!
+!classDefinition: 'PgArrayValueParserTest class' category: #'PostgresAdapter-Tests'!
 PgArrayValueParserTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgTestCaseBase category: 'PostgresAdapter-Tests'!
+!classDefinition: #PgTestCaseBase category: #'PostgresAdapter-Tests'!
 TestCase subclass: #PgTestCaseBase
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter-Tests'!
-!classDefinition: 'PgTestCaseBase class' category: 'PostgresAdapter-Tests'!
+!classDefinition: 'PgTestCaseBase class' category: #'PostgresAdapter-Tests'!
 PgTestCaseBase class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgClientIntegrationTest category: 'PostgresAdapter-Tests'!
+!classDefinition: #PgClientIntegrationTest category: #'PostgresAdapter-Tests'!
 PgTestCaseBase subclass: #PgClientIntegrationTest
 	instanceVariableNames: 'client'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter-Tests'!
-!classDefinition: 'PgClientIntegrationTest class' category: 'PostgresAdapter-Tests'!
+!classDefinition: 'PgClientIntegrationTest class' category: #'PostgresAdapter-Tests'!
 PgClientIntegrationTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgConnectionPoolIntegrationTest category: 'PostgresAdapter-Tests'!
+!classDefinition: #PgConnectionPoolIntegrationTest category: #'PostgresAdapter-Tests'!
 PgTestCaseBase subclass: #PgConnectionPoolIntegrationTest
 	instanceVariableNames: 'pool'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter-Tests'!
-!classDefinition: 'PgConnectionPoolIntegrationTest class' category: 'PostgresAdapter-Tests'!
+!classDefinition: 'PgConnectionPoolIntegrationTest class' category: #'PostgresAdapter-Tests'!
 PgConnectionPoolIntegrationTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgFormattedStatementIntegrationTest category: 'PostgresAdapter-Tests'!
+!classDefinition: #PgFormattedStatementIntegrationTest category: #'PostgresAdapter-Tests'!
 PgTestCaseBase subclass: #PgFormattedStatementIntegrationTest
 	instanceVariableNames: 'client'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter-Tests'!
-!classDefinition: 'PgFormattedStatementIntegrationTest class' category: 'PostgresAdapter-Tests'!
+!classDefinition: 'PgFormattedStatementIntegrationTest class' category: #'PostgresAdapter-Tests'!
 PgFormattedStatementIntegrationTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgPreparedStatementIntegrationTest category: 'PostgresAdapter-Tests'!
+!classDefinition: #PgPreparedStatementIntegrationTest category: #'PostgresAdapter-Tests'!
 PgTestCaseBase subclass: #PgPreparedStatementIntegrationTest
 	instanceVariableNames: 'client'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter-Tests'!
-!classDefinition: 'PgPreparedStatementIntegrationTest class' category: 'PostgresAdapter-Tests'!
+!classDefinition: 'PgPreparedStatementIntegrationTest class' category: #'PostgresAdapter-Tests'!
 PgPreparedStatementIntegrationTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgTimestampReaderTest category: 'PostgresAdapter-Tests'!
+!classDefinition: #PgTimestampReaderTest category: #'PostgresAdapter-Tests'!
 PgTestCaseBase subclass: #PgTimestampReaderTest
 	instanceVariableNames: 'usedClass'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter-Tests'!
-!classDefinition: 'PgTimestampReaderTest class' category: 'PostgresAdapter-Tests'!
+!classDefinition: 'PgTimestampReaderTest class' category: #'PostgresAdapter-Tests'!
 PgTimestampReaderTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgArrayValueParser category: 'PostgresAdapter'!
+!classDefinition: #PgArrayValueParser category: #PostgresAdapter!
 Object subclass: #PgArrayValueParser
 	instanceVariableNames: 'stream converter'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgArrayValueParser class' category: 'PostgresAdapter'!
+!classDefinition: 'PgArrayValueParser class' category: #PostgresAdapter!
 PgArrayValueParser class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgCharacterEncoder category: 'PostgresAdapter'!
+!classDefinition: #PgCharacterEncoder category: #PostgresAdapter!
 Object subclass: #PgCharacterEncoder
 	instanceVariableNames: 'stringEncoder streamReader'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgCharacterEncoder class' category: 'PostgresAdapter'!
+!classDefinition: 'PgCharacterEncoder class' category: #PostgresAdapter!
 PgCharacterEncoder class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgCharacterStreamer category: 'PostgresAdapter'!
+!classDefinition: #PgCharacterStreamer category: #PostgresAdapter!
 Object subclass: #PgCharacterStreamer
 	instanceVariableNames: 'writeStream'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgCharacterStreamer class' category: 'PostgresAdapter'!
+!classDefinition: 'PgCharacterStreamer class' category: #PostgresAdapter!
 PgCharacterStreamer class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgObject category: 'PostgresAdapter'!
+!classDefinition: #PgObject category: #PostgresAdapter!
 Object subclass: #PgObject
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgObject class' category: 'PostgresAdapter'!
+!classDefinition: 'PgObject class' category: #PostgresAdapter!
 PgObject class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgClient category: 'PostgresAdapter'!
+!classDefinition: #PgClient category: #PostgresAdapter!
 PgObject subclass: #PgClient
 	instanceVariableNames: 'connection session settings properties converter message'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgClient class' category: 'PostgresAdapter'!
+!classDefinition: 'PgClient class' category: #PostgresAdapter!
 PgClient class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgConnectionPool category: 'PostgresAdapter'!
+!classDefinition: #PgConnectionPool category: #PostgresAdapter!
 PgObject subclass: #PgConnectionPool
 	instanceVariableNames: 'configurator pool access settings'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgConnectionPool class' category: 'PostgresAdapter'!
+!classDefinition: 'PgConnectionPool class' category: #PostgresAdapter!
 PgConnectionPool class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgConverter category: 'PostgresAdapter'!
+!classDefinition: #PgConverter category: #PostgresAdapter!
 PgObject subclass: #PgConverter
 	instanceVariableNames: 'encoder timezone map stringWriteStream asciiReadStream asciiWriteStream'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgConverter class' category: 'PostgresAdapter'!
+!classDefinition: 'PgConverter class' category: #PostgresAdapter!
 PgConverter class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgFormattedStatement category: 'PostgresAdapter'!
+!classDefinition: #PgFormattedStatement category: #PostgresAdapter!
 PgObject subclass: #PgFormattedStatement
 	instanceVariableNames: 'client sql'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgFormattedStatement class' category: 'PostgresAdapter'!
+!classDefinition: 'PgFormattedStatement class' category: #PostgresAdapter!
 PgFormattedStatement class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgMessageBuffer category: 'PostgresAdapter'!
+!classDefinition: #PgMessageBuffer category: #PostgresAdapter!
 PgObject subclass: #PgMessageBuffer
 	instanceVariableNames: 'tag payload size'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgMessageBuffer class' category: 'PostgresAdapter'!
+!classDefinition: 'PgMessageBuffer class' category: #PostgresAdapter!
 PgMessageBuffer class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgMessageBuilder category: 'PostgresAdapter'!
+!classDefinition: #PgMessageBuilder category: #PostgresAdapter!
 PgObject subclass: #PgMessageBuilder
 	instanceVariableNames: 'encoder byteStream'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgMessageBuilder class' category: 'PostgresAdapter'!
+!classDefinition: 'PgMessageBuilder class' category: #PostgresAdapter!
 PgMessageBuilder class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgParameterDescription category: 'PostgresAdapter'!
+!classDefinition: #PgParameterDescription category: #PostgresAdapter!
 PgObject subclass: #PgParameterDescription
 	instanceVariableNames: 'typeOid'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgParameterDescription class' category: 'PostgresAdapter'!
+!classDefinition: 'PgParameterDescription class' category: #PostgresAdapter!
 PgParameterDescription class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgPreparedStatement category: 'PostgresAdapter'!
+!classDefinition: #PgPreparedStatement category: #PostgresAdapter!
 PgObject subclass: #PgPreparedStatement
 	instanceVariableNames: 'client name paramDescriptions fieldDescriptions'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgPreparedStatement class' category: 'PostgresAdapter'!
+!classDefinition: 'PgPreparedStatement class' category: #PostgresAdapter!
 PgPreparedStatement class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgResult category: 'PostgresAdapter'!
+!classDefinition: #PgResult category: #PostgresAdapter!
 PgObject subclass: #PgResult
 	instanceVariableNames: 'results descriptions data'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgResult class' category: 'PostgresAdapter'!
+!classDefinition: 'PgResult class' category: #PostgresAdapter!
 PgResult class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgRowFieldDescription category: 'PostgresAdapter'!
+!classDefinition: #PgRowFieldDescription category: #PostgresAdapter!
 PgObject subclass: #PgRowFieldDescription
 	instanceVariableNames: 'fieldName tableOid attributeNumber typeOid typeSize typeModifier format'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgRowFieldDescription class' category: 'PostgresAdapter'!
+!classDefinition: 'PgRowFieldDescription class' category: #PostgresAdapter!
 PgRowFieldDescription class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgSqlConverter category: 'PostgresAdapter'!
+!classDefinition: #PgSqlConverter category: #PostgresAdapter!
 PgObject subclass: #PgSqlConverter
 	instanceVariableNames: 'expandedSnippet expansionArgs argumentIdx'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgSqlConverter class' category: 'PostgresAdapter'!
+!classDefinition: 'PgSqlConverter class' category: #PostgresAdapter!
 PgSqlConverter class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgTimestampReader category: 'PostgresAdapter'!
+!classDefinition: #PgTimestampReader category: #PostgresAdapter!
 PgObject subclass: #PgTimestampReader
 	instanceVariableNames: 'readStream'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgTimestampReader class' category: 'PostgresAdapter'!
+!classDefinition: 'PgTimestampReader class' category: #PostgresAdapter!
 PgTimestampReader class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgSystemAdapter category: 'PostgresAdapter'!
+!classDefinition: #PgSystemAdapter category: #PostgresAdapter!
 Object subclass: #PgSystemAdapter
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgSystemAdapter class' category: 'PostgresAdapter'!
+!classDefinition: 'PgSystemAdapter class' category: #PostgresAdapter!
 PgSystemAdapter class
 	instanceVariableNames: 'instance'!
 
-!classDefinition: #PgCuisAdapter category: 'PostgresAdapter'!
+!classDefinition: #PgCuisAdapter category: #PostgresAdapter!
 PgSystemAdapter subclass: #PgCuisAdapter
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgCuisAdapter class' category: 'PostgresAdapter'!
+!classDefinition: 'PgCuisAdapter class' category: #PostgresAdapter!
 PgCuisAdapter class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgTypeObject category: 'PostgresAdapter'!
+!classDefinition: #PgTypeObject category: #PostgresAdapter!
 Object subclass: #PgTypeObject
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgTypeObject class' category: 'PostgresAdapter'!
+!classDefinition: 'PgTypeObject class' category: #PostgresAdapter!
 PgTypeObject class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgBitString category: 'PostgresAdapter'!
+!classDefinition: #PgBitString category: #PostgresAdapter!
 PgTypeObject subclass: #PgBitString
 	instanceVariableNames: 'bits'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgBitString class' category: 'PostgresAdapter'!
+!classDefinition: 'PgBitString class' category: #PostgresAdapter!
 PgBitString class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgFixedBitString category: 'PostgresAdapter'!
+!classDefinition: #PgFixedBitString category: #PostgresAdapter!
 PgBitString subclass: #PgFixedBitString
 	instanceVariableNames: 'size'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgFixedBitString class' category: 'PostgresAdapter'!
+!classDefinition: 'PgFixedBitString class' category: #PostgresAdapter!
 PgFixedBitString class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgGeometricObject category: 'PostgresAdapter'!
+!classDefinition: #PgGeometricObject category: #PostgresAdapter!
 PgTypeObject subclass: #PgGeometricObject
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgGeometricObject class' category: 'PostgresAdapter'!
+!classDefinition: 'PgGeometricObject class' category: #PostgresAdapter!
 PgGeometricObject class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgBox category: 'PostgresAdapter'!
+!classDefinition: #PgBox category: #PostgresAdapter!
 PgGeometricObject subclass: #PgBox
 	instanceVariableNames: 'upperRight lowerLeft'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgBox class' category: 'PostgresAdapter'!
+!classDefinition: 'PgBox class' category: #PostgresAdapter!
 PgBox class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgCircle category: 'PostgresAdapter'!
+!classDefinition: #PgCircle category: #PostgresAdapter!
 PgGeometricObject subclass: #PgCircle
 	instanceVariableNames: 'center radius'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgCircle class' category: 'PostgresAdapter'!
+!classDefinition: 'PgCircle class' category: #PostgresAdapter!
 PgCircle class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgLine category: 'PostgresAdapter'!
+!classDefinition: #PgLine category: #PostgresAdapter!
 PgGeometricObject subclass: #PgLine
 	instanceVariableNames: 'a b c'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgLine class' category: 'PostgresAdapter'!
+!classDefinition: 'PgLine class' category: #PostgresAdapter!
 PgLine class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgLineSegment category: 'PostgresAdapter'!
+!classDefinition: #PgLineSegment category: #PostgresAdapter!
 PgGeometricObject subclass: #PgLineSegment
 	instanceVariableNames: 'start stop'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgLineSegment class' category: 'PostgresAdapter'!
+!classDefinition: 'PgLineSegment class' category: #PostgresAdapter!
 PgLineSegment class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgPoint category: 'PostgresAdapter'!
+!classDefinition: #PgPoint category: #PostgresAdapter!
 PgGeometricObject subclass: #PgPoint
 	instanceVariableNames: 'x y'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgPoint class' category: 'PostgresAdapter'!
+!classDefinition: 'PgPoint class' category: #PostgresAdapter!
 PgPoint class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgPolygon category: 'PostgresAdapter'!
+!classDefinition: #PgPolygon category: #PostgresAdapter!
 PgGeometricObject subclass: #PgPolygon
 	instanceVariableNames: 'points'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgPolygon class' category: 'PostgresAdapter'!
+!classDefinition: 'PgPolygon class' category: #PostgresAdapter!
 PgPolygon class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgPath category: 'PostgresAdapter'!
+!classDefinition: #PgPath category: #PostgresAdapter!
 PgPolygon subclass: #PgPath
 	instanceVariableNames: 'open'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgPath class' category: 'PostgresAdapter'!
+!classDefinition: 'PgPath class' category: #PostgresAdapter!
 PgPath class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgInterval category: 'PostgresAdapter'!
+!classDefinition: #PgInterval category: #PostgresAdapter!
 PgTypeObject subclass: #PgInterval
 	instanceVariableNames: 'years months days hours minutes seconds'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgInterval class' category: 'PostgresAdapter'!
+!classDefinition: 'PgInterval class' category: #PostgresAdapter!
 PgInterval class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgTimeWithTimezone category: 'PostgresAdapter'!
+!classDefinition: #PgTimeWithTimezone category: #PostgresAdapter!
 PgTypeObject subclass: #PgTimeWithTimezone
 	instanceVariableNames: 'hours minutes seconds utcOffset'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgTimeWithTimezone class' category: 'PostgresAdapter'!
+!classDefinition: 'PgTimeWithTimezone class' category: #PostgresAdapter!
 PgTimeWithTimezone class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgValuesArray category: 'PostgresAdapter'!
+!classDefinition: #PgValuesArray category: #PostgresAdapter!
 Object subclass: #PgValuesArray
 	instanceVariableNames: 'array'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter'!
-!classDefinition: 'PgValuesArray class' category: 'PostgresAdapter'!
+!classDefinition: 'PgValuesArray class' category: #PostgresAdapter!
 PgValuesArray class
 	instanceVariableNames: ''!
 
-!classDefinition: #PgIntegrationTestAdapter category: 'PostgresAdapter-Tests'!
+!classDefinition: #PgIntegrationTestAdapter category: #'PostgresAdapter-Tests'!
 Object subclass: #PgIntegrationTestAdapter
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PostgresAdapter-Tests'!
-!classDefinition: 'PgIntegrationTestAdapter class' category: 'PostgresAdapter-Tests'!
+!classDefinition: 'PgIntegrationTestAdapter class' category: #'PostgresAdapter-Tests'!
 PgIntegrationTestAdapter class
 	instanceVariableNames: 'integrationConfig'!
 
@@ -867,166 +867,6 @@ statement query: { P3ValuesArray withAll: #(1 2) }.
 statement _ client format: 'SELECT * FROM fmi_owner WHERE id = ANY ($1)'.
 statement query: { P3ValuesArray withAll: #(1 2) }.
 !
-
-!PgClient methodsFor: 'printing' stamp: 'jpb 1/7/2021 18:56:12'!
-printOn: stream
-	super printOn: stream.
-	stream nextPut: $(.
-	self session ifNotNil: [ stream space; print: session ].
-	stream nextPut: $)! !
-
-!PgConnectionPool methodsFor: 'printing'!
-printOn: stream
-	super printOn: stream.
-	stream 
-		nextPut: $(; 
-		print: self url; space; 
-		print: self size; nextPut: $/; print: self capacity; 
-		nextPut: $)! !
-
-!PgConverter methodsFor: 'printing' stamp: 'jpb 1/8/2021 17:20:35'!
-printOn: stream
-	super printOn: stream.
-	
-	stream nextPut: $(.
-	self encoder printOn: stream.
-	stream space.
-	self timezone ifNotNil: [ :tmz | tmz printOn: stream ].
-	stream nextPut: $)! !
-
-!PgFormattedStatement methodsFor: 'printing'!
-printOn: stream
-	super printOn: stream.
-	stream nextPut: $(; << sql; nextPut: $)! !
-
-!PgParameterDescription methodsFor: 'accessing' stamp: 'jpb 1/6/2021 10:37:04'!
-typeName
-	^ (PgConverter typeMap at: self typeOid ifAbsent: [ ^ self typeOid ]) first! !
-
-!PgParameterDescription methodsFor: 'printing'!
-printOn: stream
-	super printOn: stream.
-	stream nextPut: $(.
-	stream << self typeName.
-	stream nextPut: $)! !
-
-!PgPreparedStatement methodsFor: 'printing'!
-printOn: stream
-	super printOn: stream.
-	stream nextPut: $(; << name; nextPut: $)! !
-
-!PgPreparedStatement methodsFor: 'accessing'!
-name
-	^ name! !
-
-!PgResult methodsFor: 'printing' stamp: 'jpb 1/7/2021 20:01:42'!
-printOn: stream
-	super printOn: stream.
-	stream nextPut: $(.
-	self hasResults
-		ifTrue: [ stream print: results ].! !
-
-!PgRowFieldDescription methodsFor: 'printing' stamp: 'jpb 1/8/2021 13:50:08'!
-printOn: stream
-	super printOn: stream.
-	stream nextPut: $(.
-	stream nextPutAll: fieldName.
-	stream space.
-	stream nextPutAll: self typeName.
-	stream nextPut: $)! !
-
-!PgRowFieldDescription methodsFor: 'accessing'!
-format
-	^ format! !
-
-!PgRowFieldDescription methodsFor: 'accessing' stamp: 'jpb 1/6/2021 10:37:04'!
-typeName
-	^ (PgConverter typeMap at: self typeOid ifAbsent: [ ^ self typeOid ]) first! !
-
-!PgBitString methodsFor: 'printing'!
-printOn: stream
-	1 to: self size do: [ :index |
-		stream nextPut: (48 + (bits bitAt: index)) asCharacter ]! !
-
-!PgBox methodsFor: 'printing'!
-printOn: stream
-	upperRight printOn: stream.
-	stream nextPut: $,.
-	lowerLeft printOn: stream! !
-
-!PgCircle methodsFor: 'printing'!
-printOn: stream
-	stream nextPut: $<.
-	center printOn: stream.
-	stream nextPut: $,.
-	radius printOn: stream.
-	stream nextPut: $>! !
-
-!PgLine methodsFor: 'comparing'!
-printOn: stream
-	stream 
-		nextPut: ${;
-		print: a;
-		nextPut: $,;
-		print: b;
-		nextPut: $,;
-		print: c;
-		nextPut: $}! !
-
-!PgLineSegment methodsFor: 'printing'!
-printOn: stream
-	stream nextPut: $[.
-	start printOn: stream.
-	stream nextPut: $,.
-	stop printOn: stream.
-	stream nextPut: $]! !
-
-!PgPoint methodsFor: 'printing'!
-printOn: stream
-	stream nextPut: $(.
-	x printOn: stream.
-	stream nextPut: $,.
-	y printOn: stream.
-	stream nextPut: $)! !
-
-!PgPolygon methodsFor: 'printing'!
-printOn: stream
-	stream nextPut: $(.
-	self printPointsOn: stream.
-	stream nextPut: $)! !
-
-!PgPath methodsFor: 'printing'!
-printOn: stream
-	stream nextPut: (self isOpen ifTrue: [ $[ ] ifFalse: [ $( ]).
-	self printPointsOn: stream.
-	stream nextPut: (self isOpen ifTrue: [ $] ] ifFalse: [ $) ])	
-	! !
-
-!PgInterval methodsFor: 'printing'!
-printOn: stream
-	| space |
-	space _ false.
-	years = 0 ifFalse: [ 
-		stream print: years; space.
-		stream nextPutAll: (years = 1 ifTrue: [ 'year' ] ifFalse: [ 'years' ]).
-		space _ true ].
-	months = 0 ifFalse: [
-		space ifTrue: [ stream space ]. 
-		stream print: months; space.
-		stream nextPutAll: (months = 1 ifTrue: [ 'mon' ] ifFalse: [ 'mons' ]).
-		space _ true ].
-	days = 0 ifFalse: [
-		space ifTrue: [ stream space ]. 
-		stream print: days; space.
-		stream nextPutAll: (days = 1 ifTrue: [ 'day' ] ifFalse: [ 'days' ]).
-		space _ true ].
-	space ifTrue: [ stream space ].
-	hours printOn: stream base: 10 length: 2 padded: true.
-	stream nextPut: $:.
-	minutes printOn: stream base: 10 length: 2 padded: true.
-	stream nextPut: $:.
-	seconds < 10 ifTrue: [ stream print: 0 ].
-	seconds printOn: stream! !
 
 !PgError methodsFor: 'accessing'!
 code
@@ -2792,6 +2632,13 @@ on: newStream
 systemAdapter
 	^PgSystemAdapter current! !
 
+!PgClient methodsFor: 'printing' stamp: 'jpb 1/7/2021 18:56:12'!
+printOn: stream
+	super printOn: stream.
+	stream nextPut: $(.
+	self session ifNotNil: [ stream space; print: session ].
+	stream nextPut: $)! !
+
 !PgClient methodsFor: 'error handling'!
 errorNoticeInfo: payload
 	| info fieldType |
@@ -3124,38 +2971,38 @@ newMessageBuilder
 
 	^ PgMessageBuilder newWithEncoder: self converter encoder! !
 
-!PgClient methodsFor: 'private' stamp: 'jpb 1/7/2021 19:11:50'!
+!PgClient methodsFor: 'private' stamp: 'DF 2/18/2024 18:30:51'!
 processBackendKeyData: payload
 
-	session _ payload  nextUnsignedInt32BigEndian: true.
+	session := payload  nextUint32BigEndian: true.
 	properties at: 'backend_process_id' put: session.
-	properties at: 'backend_secret_key' put: (payload nextUnsignedInt32BigEndian: true).! !
+	properties at: 'backend_secret_key' put: (payload nextUint32BigEndian: true).! !
 
-!PgClient methodsFor: 'private' stamp: 'jpb 1/7/2021 19:53:06'!
+!PgClient methodsFor: 'private' stamp: 'DF 2/18/2024 18:44:39'!
 processDataRowUsing: description
 	| count record readStream |
-	readStream _ message readStream.
-	count _ readStream nextUnsignedInt16BigEndian: true.
-	record _ Array new: count.
+	readStream := message readStream.
+	count := readStream nextUint16BigEndian: true.
+	record := Array new: count.
 	
 	1 to: count do: [ :index | | size |
-		size _ readStream nextUnsignedInt32BigEndian: true.
+		size := readStream nextUint32BigEndian: true.
 		size = 16rFFFFFFFF
 			ifFalse: [ | object |
-				object _ (description at: index) convert: readStream length: size using: converter.
+				object := (description at: index) convert: readStream length: size using: converter.
 				record at: index put: object ] ].
 	^ record! !
 
-!PgClient methodsFor: 'private' stamp: 'jpb 1/8/2021 17:37:28'!
+!PgClient methodsFor: 'private' stamp: 'DF 2/19/2024 19:57:21'!
 processParameterDescription: payload
 	| count |
-	count _ payload nextUnsignedInt16BigEndian: true.
+	count := payload nextUint16BigEndian: true.
 	
 	^ Array streamContents: [ :out |
 			count timesRepeat: [
 				| newDescription |
-				newDescription _ PgParameterDescription new
-					typeOid: (payload nextUnsignedInt32BigEndian: true);
+				newDescription := PgParameterDescription new
+					typeOid: (payload nextUint32BigEndian: true);
 					yourself.
 					 
 				out nextPut: newDescription ]]
@@ -3172,22 +3019,22 @@ processParameterStatus: payload
 		
 	properties at: key put: value! !
 
-!PgClient methodsFor: 'private' stamp: 'jpb 1/8/2021 17:38:29'!
+!PgClient methodsFor: 'private' stamp: 'DF 2/18/2024 18:44:25'!
 processRowDescription: payload
 	| count |
-	count _ payload nextUnsignedInt16BigEndian: true.
+	count := payload nextUint16BigEndian: true.
 	
 	^ Array streamContents: [ :out |
 			count timesRepeat: [ 
 				| newDescription |
-				newDescription _ PgRowFieldDescription new
+				newDescription := PgRowFieldDescription new
 					fieldName: (self converter encodedCStringFrom: payload);
-					tableOid: (payload nextUnsignedInt32BigEndian: true);
-					attributeNumber: (payload nextUnsignedInt16BigEndian: true);
-					typeOid: (payload nextUnsignedInt32BigEndian: true);
-					typeSize: (payload nextUnsignedInt16BigEndian: true);
-					typeModifier: (payload nextUnsignedInt32BigEndian: true);
-					format: (payload nextUnsignedInt16BigEndian: true);
+					tableOid: (payload nextUint32BigEndian: true);
+					attributeNumber: (payload nextUint16BigEndian: true);
+					typeOid: (payload nextUint32BigEndian: true);
+					typeSize: (payload nextUint16BigEndian: true);
+					typeModifier: (payload nextUint32BigEndian: true);
+					format: (payload nextUint16BigEndian: true);
 					yourself.
 				
 				out nextPut: newDescription ] ]
@@ -3511,6 +3358,15 @@ newFrom: configurator
 	
 	^newClient! !
 
+!PgConnectionPool methodsFor: 'printing'!
+printOn: stream
+	super printOn: stream.
+	stream 
+		nextPut: $(; 
+		print: self url; space; 
+		print: self size; nextPut: $/; print: self capacity; 
+		nextPut: $)! !
+
 !PgConnectionPool methodsFor: 'public'!
 acquireConnection
 	"Return a connection (P3Client) from the pool or create a new one.
@@ -3623,6 +3479,16 @@ newFrom: newSettings
 	newPool settings: newSettings.
 	
 	^newPool! !
+
+!PgConverter methodsFor: 'printing' stamp: 'jpb 1/8/2021 17:20:35'!
+printOn: stream
+	super printOn: stream.
+	
+	stream nextPut: $(.
+	self encoder printOn: stream.
+	stream space.
+	self timezone ifNotNil: [ :tmz | tmz printOn: stream ].
+	stream nextPut: $)! !
 
 !PgConverter methodsFor: 'converting-geometric' stamp: 'jpb 1/6/2021 10:36:32'!
 convertBoxFrom: bytes length: length description: description
@@ -3832,22 +3698,20 @@ initialize
 	stringWriteStream _ ByteArray new writeStream.
 	self initializeTypeMap! !
 
-!PgConverter methodsFor: 'initialize' stamp: 'jpb 1/6/2021 11:41:34'!
+!PgConverter methodsFor: 'initialize' stamp: 'DF 2/18/2024 18:41:07'!
 initializeFrom: properties
 	| serverTimezone serverEncoder |
 	"Try to resolve the session/connection timezone"
-	serverTimezone _ properties at: 'TimeZone' ifAbsent: [ 'GMT' ].
-	"The fallback for unknown timezones is normally GMT but can be overwritten with ZCurrentTimezone."
-	serverTimezone _ [ self findTimezoneById: serverTimezone ]
-		 on: Error
-		 do: [ self findTimezoneByName: #current ].
+	serverTimezone := properties at: 'TimeZone' ifAbsent: [ 'GMT' ].
+	
+	"Cuis doesn't have a TimeZone object."
 		
 	self timezone: serverTimezone.
 	"Try to resolve the session/connection character encoder/decoder"
-	serverEncoder _ properties at: 'client_encoding' ifAbsent: [ 'UTF8' ].
+	serverEncoder := properties at: 'client_encoding' ifAbsent: [ 'UTF8' ].
 	
 	"The fallback for unknown encodings is normally UTF8 but can be overwritten"
-	serverEncoder _ self findCharacterEncoderByName: serverEncoder.
+	serverEncoder := self findCharacterEncoderByName: serverEncoder.
 	self encoder: serverEncoder! !
 
 !PgConverter methodsFor: 'initialize'!
@@ -3990,6 +3854,11 @@ typeMap
 			628 #(line #convertLineFrom:length:description:)
 			718 #(circle #convertCircleFrom:length:description:)
 		)! !
+
+!PgFormattedStatement methodsFor: 'printing'!
+printOn: stream
+	super printOn: stream.
+	stream nextPut: $(; << sql; nextPut: $)! !
 
 !PgFormattedStatement methodsFor: 'public'!
 close! !
@@ -4358,6 +4227,10 @@ printValuesArray: valuesArray on: stream
 newWithEncoder: anEncoder
 	^ self new initWithEncoder: anEncoder! !
 
+!PgParameterDescription methodsFor: 'accessing' stamp: 'jpb 1/6/2021 10:37:04'!
+typeName
+	^ (PgConverter typeMap at: self typeOid ifAbsent: [ ^ self typeOid ]) first! !
+
 !PgParameterDescription methodsFor: 'accessing'!
 typeOid
 	^ typeOid! !
@@ -4365,6 +4238,18 @@ typeOid
 !PgParameterDescription methodsFor: 'accessing'!
 typeOid: anObject
 	typeOid _ anObject! !
+
+!PgParameterDescription methodsFor: 'printing'!
+printOn: stream
+	super printOn: stream.
+	stream nextPut: $(.
+	stream << self typeName.
+	stream nextPut: $)! !
+
+!PgPreparedStatement methodsFor: 'printing'!
+printOn: stream
+	super printOn: stream.
+	stream nextPut: $(; << name; nextPut: $)! !
 
 !PgPreparedStatement methodsFor: 'accessing'!
 converter 
@@ -4377,6 +4262,10 @@ fieldCount
 !PgPreparedStatement methodsFor: 'accessing'!
 fieldDescriptions
 	^ fieldDescriptions! !
+
+!PgPreparedStatement methodsFor: 'accessing'!
+name
+	^ name! !
 
 !PgPreparedStatement methodsFor: 'accessing'!
 paramCount
@@ -4410,13 +4299,13 @@ bindStrings: inputValues
 
 	client writeMessageNoFlush: msgBuilder asBytes tag: $B! !
 
-!PgPreparedStatement methodsFor: 'input/output'!
+!PgPreparedStatement methodsFor: 'input/output' stamp: 'DF 2/19/2024 20:18:48'!
 writeCloseMessage: aName type: aChar
 
 	| msgBuilder |
-	msgBuilder _ client newMessageBuilder.
+	msgBuilder := client newMessageBuilder.
 	msgBuilder 
-		nextPutByte: aChar asInteger;
+		nextPutByte: aChar asciiValue ;
 		nextPutString: aName.
 	client writeMessageNoFlush: msgBuilder asBytes tag: $C! !
 
@@ -4526,6 +4415,13 @@ queryAll: inputRows
 newWith: aClient name: aString parameters: paramDescriptions fields: rowDescriptions
 
 	^ self new initializeWith: aClient name: aString parameters: paramDescriptions fields: rowDescriptions! !
+
+!PgResult methodsFor: 'printing' stamp: 'jpb 1/7/2021 20:01:42'!
+printOn: stream
+	super printOn: stream.
+	stream nextPut: $(.
+	self hasResults
+		ifTrue: [ stream print: results ].! !
 
 !PgResult methodsFor: 'convenience'!
 columnNames
@@ -4699,6 +4595,15 @@ descriptions: descriptions rows: aRowArray message: aString
 			results: aString;
 			yourself! !
 
+!PgRowFieldDescription methodsFor: 'printing' stamp: 'jpb 1/8/2021 13:50:08'!
+printOn: stream
+	super printOn: stream.
+	stream nextPut: $(.
+	stream nextPutAll: fieldName.
+	stream space.
+	stream nextPutAll: self typeName.
+	stream nextPut: $)! !
+
 !PgRowFieldDescription methodsFor: 'accessing'!
 attributeNumber
 	^ attributeNumber! !
@@ -4714,6 +4619,10 @@ fieldName
 !PgRowFieldDescription methodsFor: 'accessing'!
 fieldName: anObject
 	fieldName _ anObject! !
+
+!PgRowFieldDescription methodsFor: 'accessing'!
+format
+	^ format! !
 
 !PgRowFieldDescription methodsFor: 'accessing'!
 format: anObject
@@ -4734,6 +4643,10 @@ typeModifier
 !PgRowFieldDescription methodsFor: 'accessing'!
 typeModifier: anObject
 	typeModifier _ anObject! !
+
+!PgRowFieldDescription methodsFor: 'accessing' stamp: 'jpb 1/6/2021 10:37:04'!
+typeName
+	^ (PgConverter typeMap at: self typeOid ifAbsent: [ ^ self typeOid ]) first! !
 
 !PgRowFieldDescription methodsFor: 'accessing'!
 typeOid
@@ -5217,12 +5130,12 @@ findTimezoneByName: aSymbol
 findTimezoneNameBy: aTimeZone 
 	^aTimeZone abbreviation ! !
 
-!PgCuisAdapter methodsFor: 'as yet unclassified' stamp: 'jpb 1/7/2021 19:43:22'!
+!PgCuisAdapter methodsFor: 'as yet unclassified' stamp: 'DF 2/18/2024 18:42:52'!
 findUTF8Encoder
 	| encoder |
-	encoder _ PgCharacterEncoder new.
-	encoder stringEncoder: [ :string | string asUtf8 ].
-	encoder streamReader: [ :byteArray | String fromUtf8: byteArray ].
+	encoder := PgCharacterEncoder new.
+	encoder stringEncoder: [ :string | string asUtf8Bytes ].
+	encoder streamReader: [ :byteArray | String fromUtf8Bytes: byteArray ].
 	
 	^encoder! !
 
@@ -5307,6 +5220,11 @@ postgresPrintUsing: delegate on: stream
 	Check the implementors of #p3PrintOn:using:"
 
 	delegate printBitString: self on: stream! !
+
+!PgBitString methodsFor: 'printing'!
+printOn: stream
+	1 to: self size do: [ :index |
+		stream nextPut: (48 + (bits bitAt: index)) asCharacter ]! !
 
 !PgBitString methodsFor: 'accessing'!
 bitAt: index
@@ -5461,6 +5379,12 @@ tag
 tag
 	self subclassResponsibility! !
 
+!PgBox methodsFor: 'printing'!
+printOn: stream
+	upperRight printOn: stream.
+	stream nextPut: $,.
+	lowerLeft printOn: stream! !
+
 !PgBox methodsFor: 'comparing'!
 = anotherBox
 	self == anotherBox ifTrue: [ ^ true ].
@@ -5530,6 +5454,14 @@ upperRight: upperRight lowerLeft: lowerLeft
 !PgBox class methodsFor: 'instance creation' stamp: 'jpb 1/6/2021 10:36:04'!
 zero
 	^ self upperRight: PgPoint zero lowerLeft: PgPoint zero! !
+
+!PgCircle methodsFor: 'printing'!
+printOn: stream
+	stream nextPut: $<.
+	center printOn: stream.
+	stream nextPut: $,.
+	radius printOn: stream.
+	stream nextPut: $>! !
 
 !PgCircle methodsFor: 'private'!
 center: point
@@ -5608,6 +5540,17 @@ tag
 hash 
 	^ ((a hash + b hash) hashMultiply + c hash) hashMultiply ! !
 
+!PgLine methodsFor: 'comparing'!
+printOn: stream
+	stream 
+		nextPut: ${;
+		print: a;
+		nextPut: $,;
+		print: b;
+		nextPut: $,;
+		print: c;
+		nextPut: $}! !
+
 !PgLine methodsFor: 'private'!
 a: number
 	a _ number! !
@@ -5667,6 +5610,14 @@ xAxis
 !PgLine class methodsFor: 'instance creation'!
 yAxis
 	^ self a: 1 b: 0 c: 0! !
+
+!PgLineSegment methodsFor: 'printing'!
+printOn: stream
+	stream nextPut: $[.
+	start printOn: stream.
+	stream nextPut: $,.
+	stop printOn: stream.
+	stream nextPut: $]! !
 
 !PgLineSegment methodsFor: 'private'!
 start: point
@@ -5729,6 +5680,14 @@ xAxisUnit
 !PgLineSegment class methodsFor: 'instance creation' stamp: 'jpb 1/6/2021 10:36:04'!
 yAxisUnit
 	^ self start: PgPoint zero stop: (PgPoint x: 0 y: 1) ! !
+
+!PgPoint methodsFor: 'printing'!
+printOn: stream
+	stream nextPut: $(.
+	x printOn: stream.
+	stream nextPut: $,.
+	y printOn: stream.
+	stream nextPut: $)! !
 
 !PgPoint methodsFor: 'comparing'!
 = anotherPoint
@@ -5793,6 +5752,12 @@ zero
 	^ self x: 0 y: 0! !
 
 !PgPolygon methodsFor: 'printing'!
+printOn: stream
+	stream nextPut: $(.
+	self printPointsOn: stream.
+	stream nextPut: $)! !
+
+!PgPolygon methodsFor: 'printing'!
 printPointsOn: stream
 	points 
 		do: [ :each | each printOn: stream ] 
@@ -5854,6 +5819,13 @@ readFrom: stream
 	(stream peekFor: $)) ifFalse: [ 
 		(PgError parsingFailed: 'closing ) not found') signal ].	
 	^ self points: points! !
+
+!PgPath methodsFor: 'printing'!
+printOn: stream
+	stream nextPut: (self isOpen ifTrue: [ $[ ] ifFalse: [ $( ]).
+	self printPointsOn: stream.
+	stream nextPut: (self isOpen ifTrue: [ $] ] ifFalse: [ $) ])	
+	! !
 
 !PgPath methodsFor: 'testing'!
 isClosed
@@ -5936,6 +5908,32 @@ printIso8601On: stream
 		stream print: minutes; nextPut: $M ].
 	seconds = 0 ifFalse: [
 		stream print: seconds; nextPut: $S ]! !
+
+!PgInterval methodsFor: 'printing'!
+printOn: stream
+	| space |
+	space _ false.
+	years = 0 ifFalse: [ 
+		stream print: years; space.
+		stream nextPutAll: (years = 1 ifTrue: [ 'year' ] ifFalse: [ 'years' ]).
+		space _ true ].
+	months = 0 ifFalse: [
+		space ifTrue: [ stream space ]. 
+		stream print: months; space.
+		stream nextPutAll: (months = 1 ifTrue: [ 'mon' ] ifFalse: [ 'mons' ]).
+		space _ true ].
+	days = 0 ifFalse: [
+		space ifTrue: [ stream space ]. 
+		stream print: days; space.
+		stream nextPutAll: (days = 1 ifTrue: [ 'day' ] ifFalse: [ 'days' ]).
+		space _ true ].
+	space ifTrue: [ stream space ].
+	hours printOn: stream base: 10 length: 2 padded: true.
+	stream nextPut: $:.
+	minutes printOn: stream base: 10 length: 2 padded: true.
+	stream nextPut: $:.
+	seconds < 10 ifTrue: [ stream print: 0 ].
+	seconds printOn: stream! !
 
 !PgInterval methodsFor: 'comparing'!
 = anotherInterval
@@ -6189,6 +6187,13 @@ findIntegrationConfig
 !Number methodsFor: '*PostgresAdapter' stamp: 'jpb 10/30/2021 11:46:37'!
 postgresPrintUsing: aPgFormattedStatement on: aWriteStream 
 	self printOn: aWriteStream base: 10! !
+
+!String methodsFor: '*PostgresAdapter' stamp: 'DF 2/19/2024 20:34:40'!
+postgresPrintUsing: aPgFormattedStatement on: aWriteStream 
+
+	1 to: self size do:
+		[:i | aWriteStream nextPut: (self at: i)		].
+! !
 
 !ByteArray methodsFor: '*PostgresAdapter' stamp: 'jpb 10/30/2021 11:46:37'!
 postgresPrintUsing: aPgFormattedStatement on: aWriteStream 
