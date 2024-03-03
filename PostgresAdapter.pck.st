@@ -1,10 +1,10 @@
-'From Cuis6.3 [latest update: #6163] on 19 February 2024 at 9:49:31 pm'!
+'From Cuis6.3 [latest update: #6163] on 2 March 2024 at 3:48:34 pm'!
 'Description Cuis PostgreSQL adapter used for connecting to a PostgreSQL database using protocol V3
 
 License: MIT License
 Author: Josef Philip Bernhart
 P3 Author: Sven Van Caekenberghe'!
-!provides: 'PostgresAdapter' 1 61!
+!provides: 'PostgresAdapter' 1 62!
 !requires: 'Network-Kernel' 1 5 nil!
 !requires: 'Identities-UUID' 1 8 nil!
 !requires: 'JSON' 1 19 nil!
@@ -6188,7 +6188,7 @@ findIntegrationConfig
 postgresPrintUsing: aPgFormattedStatement on: aWriteStream 
 	self printOn: aWriteStream base: 10! !
 
-!String methodsFor: '*PostgresAdapter' stamp: 'DF 2/19/2024 20:34:40'!
+!CharacterSequence methodsFor: '*PostgresAdapter' stamp: 'DF 3/2/2024 15:48:14'!
 postgresPrintUsing: aPgFormattedStatement on: aWriteStream 
 
 	1 to: self size do:
