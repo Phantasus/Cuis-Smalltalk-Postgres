@@ -986,6 +986,12 @@ unexpectedMessageDuringStartup
 		info: { $C->'P3021'. $M->'Unexpected message during startup' } asDictionary; 
 		yourself! !
 
+!PgError class methodsFor: 'accessing' stamp: 'DF 2/29/2024 10:07:30'!
+unsupportedAuthenticationMethod
+	^ self new 
+		info: { $C->'P3022'. $M->'Unsupported Authentication Method' } asDictionary; 
+		yourself! !
+
 !PgBoundsError class methodsFor: 'as yet unclassified' stamp: 'jpb 1/6/2021 11:35:17'!
 signalFor: index lowerBound: lowerBound upperBound: upperBound in: sourceObject
 	self notYetImplemented ! !
@@ -3056,19 +3062,23 @@ setConnected
 setSSL
 	settings at: #ssl put: true! !
 
-!PgClient methodsFor: 'protocol' stamp: 'jpb 1/6/2021 10:36:56'!
+!PgClient methodsFor: 'protocol' stamp: 'DF 2/29/2024 10:07:41'!
 runAuthentication
 	[
 	self readMessageCloseAfterError tag = $R
 		ifTrue: [ | authenticationCode salt |
-			authenticationCode _ message readStream next: 4.
+			authenticationCode := message readStream next: 4.
+			
+			{ #[ 0 0 0 0 ] . #[ 0 0 0 3 ] . #[ 0 0 0 5 ] } includes: authenticationCode :: ifFalse:[
+				^PgError unsupportedAuthenticationMethod signal].
+			
 			authenticationCode = #[ 0 0 0 0 ] "AuthenticationOk"
 				ifTrue: [ ^ self ].
 			authenticationCode = #[ 0 0 0 3 ] "AuthenticationCleartextPassword"
 				ifTrue: [ self writeMessage: self clearTextPasswordMessage tag: $p ].
 			authenticationCode = #[ 0 0 0 5 ] "AuthenticationMD5Password"
 				ifTrue: [
-					salt _ message readStream next: 4.
+					salt := message readStream next: 4.
 					self writeMessage: (self md5PasswordMessage: salt) tag: $p ] ]
 		ifFalse: [ 
 			^ PgError unexpectedMessageDuringAuthentication signal ] ] repeat! !
