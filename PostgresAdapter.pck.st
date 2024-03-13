@@ -1,10 +1,10 @@
-'From Cuis6.3 [latest update: #6163] on 2 March 2024 at 3:48:34 pm'!
+'From Cuis6.3 [latest update: #6253] on 9 March 2024 at 10:22:33 pm'!
 'Description Cuis PostgreSQL adapter used for connecting to a PostgreSQL database using protocol V3
 
 License: MIT License
 Author: Josef Philip Bernhart
 P3 Author: Sven Van Caekenberghe'!
-!provides: 'PostgresAdapter' 1 62!
+!provides: 'PostgresAdapter' 1 65!
 !requires: 'Network-Kernel' 1 5 nil!
 !requires: 'Identities-UUID' 1 8 nil!
 !requires: 'JSON' 1 19 nil!
@@ -181,6 +181,16 @@ Object subclass: #PgCharacterStreamer
 	category: 'PostgresAdapter'!
 !classDefinition: 'PgCharacterStreamer class' category: #PostgresAdapter!
 PgCharacterStreamer class
+	instanceVariableNames: ''!
+
+!classDefinition: #PgNotificationResponse category: #PostgresAdapter!
+Object subclass: #PgNotificationResponse
+	instanceVariableNames: 'session channelName payload'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PostgresAdapter'!
+!classDefinition: 'PgNotificationResponse class' category: #PostgresAdapter!
+PgNotificationResponse class
 	instanceVariableNames: ''!
 
 !classDefinition: #PgObject category: #PostgresAdapter!
@@ -984,12 +994,6 @@ unexpectedMessageDuringAuthentication
 unexpectedMessageDuringStartup
 	^ self new 
 		info: { $C->'P3021'. $M->'Unexpected message during startup' } asDictionary; 
-		yourself! !
-
-!PgError class methodsFor: 'accessing' stamp: 'DF 2/29/2024 10:07:30'!
-unsupportedAuthenticationMethod
-	^ self new 
-		info: { $C->'P3022'. $M->'Unsupported Authentication Method' } asDictionary; 
 		yourself! !
 
 !PgBoundsError class methodsFor: 'as yet unclassified' stamp: 'jpb 1/6/2021 11:35:17'!
@@ -2609,11 +2613,11 @@ value: someString
 	"Encodes the given string to a ByteArray"
 	^stringEncoder value: someString! !
 
-!PgCharacterStreamer methodsFor: 'as yet unclassified' stamp: 'jpb 1/11/2021 19:26:27'!
+!PgCharacterStreamer methodsFor: 'as yet unclassified' stamp: 'DF 3/5/2024 20:44:00'!
 nextPut: newChar
 	Character
 		evaluate: [ :byte | writeStream nextPut: byte ]
-		withUtf8BytesOfUnicodeCodePoint: newChar codePoint.! !
+		withUtf8BytesOf: newChar codePoint.! !
 
 !PgCharacterStreamer methodsFor: 'as yet unclassified' stamp: 'jpb 1/11/2021 19:27:05'!
 nextPutAll: newString
@@ -2633,6 +2637,30 @@ on: newStream
 	newStreamer setStream: newStream.
 
 	^newStreamer! !
+
+!PgNotificationResponse methodsFor: 'as yet unclassified' stamp: 'DF 3/3/2024 19:53:50'!
+channelName
+	^channelName! !
+
+!PgNotificationResponse methodsFor: 'as yet unclassified' stamp: 'DF 3/3/2024 19:52:53'!
+channelName: aString
+	channelName := aString! !
+
+!PgNotificationResponse methodsFor: 'as yet unclassified' stamp: 'DF 3/3/2024 19:53:54'!
+payload
+	^payload! !
+
+!PgNotificationResponse methodsFor: 'as yet unclassified' stamp: 'DF 3/3/2024 19:53:02'!
+payload: aString
+	payload := aString! !
+
+!PgNotificationResponse methodsFor: 'as yet unclassified' stamp: 'DF 3/3/2024 19:53:43'!
+session
+	^session! !
+
+!PgNotificationResponse methodsFor: 'as yet unclassified' stamp: 'DF 3/3/2024 19:52:41'!
+session: anInteger
+	session := anInteger ! !
 
 !PgObject methodsFor: 'as yet unclassified' stamp: 'jpb 1/9/2021 12:19:53'!
 systemAdapter
@@ -2999,6 +3027,19 @@ processDataRowUsing: description
 				record at: index put: object ] ].
 	^ record! !
 
+!PgClient methodsFor: 'private' stamp: 'DF 3/3/2024 19:53:12'!
+processNotificationResponse: buffer
+
+	| sid cname payload |
+	
+	sid := buffer nextUint32BigEndian: true.
+	
+	cname := self converter encodedCStringFrom: buffer.
+	
+	payload := self converter encodedCStringFrom: buffer.
+	 
+	^PgNotificationResponse new session: sid ; channelName: cname ; payload: payload ; yourself! !
+
 !PgClient methodsFor: 'private' stamp: 'DF 2/19/2024 19:57:21'!
 processParameterDescription: payload
 	| count |
@@ -3062,23 +3103,19 @@ setConnected
 setSSL
 	settings at: #ssl put: true! !
 
-!PgClient methodsFor: 'protocol' stamp: 'DF 2/29/2024 10:07:41'!
+!PgClient methodsFor: 'protocol' stamp: 'jpb 1/6/2021 10:36:56'!
 runAuthentication
 	[
 	self readMessageCloseAfterError tag = $R
 		ifTrue: [ | authenticationCode salt |
-			authenticationCode := message readStream next: 4.
-			
-			{ #[ 0 0 0 0 ] . #[ 0 0 0 3 ] . #[ 0 0 0 5 ] } includes: authenticationCode :: ifFalse:[
-				^PgError unsupportedAuthenticationMethod signal].
-			
+			authenticationCode _ message readStream next: 4.
 			authenticationCode = #[ 0 0 0 0 ] "AuthenticationOk"
 				ifTrue: [ ^ self ].
 			authenticationCode = #[ 0 0 0 3 ] "AuthenticationCleartextPassword"
 				ifTrue: [ self writeMessage: self clearTextPasswordMessage tag: $p ].
 			authenticationCode = #[ 0 0 0 5 ] "AuthenticationMD5Password"
 				ifTrue: [
-					salt := message readStream next: 4.
+					salt _ message readStream next: 4.
 					self writeMessage: (self md5PasswordMessage: salt) tag: $p ] ]
 		ifFalse: [ 
 			^ PgError unexpectedMessageDuringAuthentication signal ] ] repeat! !
@@ -5163,11 +5200,11 @@ newCharacterStreamOn: bytes limitedBy: length encoding: newEncoder
 newUUID
 	^UUID new! !
 
-!PgCuisAdapter methodsFor: 'as yet unclassified' stamp: 'jpb 1/7/2021 19:09:34'!
+!PgCuisAdapter methodsFor: 'as yet unclassified' stamp: 'DF 3/9/2024 20:20:43'!
 openConnectionToHostNamed: newHost port: newPort timeout: newTimeout
 	| newStream |
-	newStream _ SocketStream
-		openConnectionToHost: newHost
+	newStream := SocketStream
+		openConnectionToHostNamed: newHost
 		port: newPort
 		timeout: newTimeout.
 		
@@ -6197,6 +6234,15 @@ findIntegrationConfig
 !Number methodsFor: '*PostgresAdapter' stamp: 'jpb 10/30/2021 11:46:37'!
 postgresPrintUsing: aPgFormattedStatement on: aWriteStream 
 	self printOn: aWriteStream base: 10! !
+
+!Integer methodsFor: '*PostgresAdapter' stamp: 'DF 3/5/2024 20:41:05'!
+asCharacter
+	^ Character codePoint: self.! !
+
+!DateAndTime methodsFor: '*PostgresAdapter' stamp: 'DF 3/9/2024 22:22:22'!
+postgresPrintUsing: aPgFormattedStatement on: aWriteStream 
+	
+	aPgFormattedStatement printDateAndTime: self on: aWriteStream! !
 
 !CharacterSequence methodsFor: '*PostgresAdapter' stamp: 'DF 3/2/2024 15:48:14'!
 postgresPrintUsing: aPgFormattedStatement on: aWriteStream 
